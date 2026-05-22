@@ -101,14 +101,39 @@ build_custom_mcps() {
   done
 }
 
+# サブエージェントを ~/.claude/agents/ へインストール
+install_agents() {
+  local agents_dir="$REPO_DIR/agents"
+  local target_dir="$HOME/.claude/agents"
+
+  if [ ! -d "$agents_dir" ] || [ -z "$(ls -A "$agents_dir"/*.md 2>/dev/null)" ]; then
+    echo "[SKIP] agents/ にエージェント定義が見つかりません"
+    return
+  fi
+
+  mkdir -p "$target_dir"
+
+  for agent_file in "$agents_dir"/*.md; do
+    [ -f "$agent_file" ] || continue
+    local name
+    name=$(basename "$agent_file")
+    [ "$name" = "README.md" ] && continue
+    cp "$agent_file" "$target_dir/$name"
+    echo "  [OK] エージェント導入: $name"
+  done
+
+  echo "[OK] サブエージェントを $target_dir に設定しました"
+}
+
 main() {
   check_deps
   load_env
   build_custom_mcps
   configure_claude
+  install_agents
   echo ""
   echo "=== セットアップ完了 ==="
-  echo "Claude Code を再起動してMCPを有効化してください。"
+  echo "Claude Code を再起動してMCP・サブエージェントを有効化してください。"
 }
 
 main "$@"
