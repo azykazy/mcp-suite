@@ -1,0 +1,108 @@
+{
+  "A1_grep_small": {
+    "mcp": {
+      "avg_ms": 1.5526297996984795,
+      "min_ms": 1.3344070002858643,
+      "output_bytes": 1213,
+      "approx_tokens": 303,
+      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/diff.rs:7: pub fn run(args: &Value) -> Result<String> {\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs:6: pub fn run(args: &Value) -> Result<"
+    },
+    "bash": {
+      "avg_ms": 1.2734433999867178,
+      "min_ms": 1.0704389997044927,
+      "output_bytes": 1201,
+      "approx_tokens": 300,
+      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs:6:pub fn run(args: &Value) -> Result<String> {\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs:74:fn glob_match(text: &str, pattern: &"
+    }
+  },
+  "A2_find_small": {
+    "mcp": {
+      "avg_ms": 1.1349001997587038,
+      "min_ms": 0.9326439994765678,
+      "output_bytes": 289,
+      "approx_tokens": 72,
+      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/diff.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/git_diff.rs\\n/home/kazukiazuma/mcp-sui"
+    },
+    "bash": {
+      "avg_ms": 1.394383399929211,
+      "min_ms": 1.3163920002625673,
+      "output_bytes": 289,
+      "approx_tokens": 72,
+      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/main.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/git_diff.rs\\n/home/kazukiazuma/mcp-sui"
+    }
+  },
+  "A3_diff": {
+    "mcp": {
+      "avg_ms": 1.7526225999972667,
+      "min_ms": 1.4881209999657585,
+      "output_bytes": 13142,
+      "approx_tokens": 3285,
+      "output_preview": "--- /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/main.rs\\n+++ /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/grep.rs\\n@@ -1,228 +1,178 @@\\n-use std::io::{self, BufRead, Write};\\n+use anyhow::{Contex"
+    },
+    "bash": {
+      "avg_ms": 1.7045921998942504,
+      "min_ms": 1.1390449999453267,
+      "output_bytes": 13232,
+      "approx_tokens": 3308,
+      "output_preview": "--- /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/main.rs\t2026-05-22 10:13:33.462811804 +0900\\n+++ /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/grep.rs\t2026-05-22 09:49:16.887292523 +0900\\n@@ -1,"
+    }
+  },
+  "A4_git_diff": {
+    "mcp": {
+      "avg_ms": 3.5270216001663357,
+      "min_ms": 3.379639000741008,
+      "output_bytes": 3825,
+      "approx_tokens": 956,
+      "output_preview": "diff --git a/custom/mcp-tools/src/git_diff.rs b/custom/mcp-tools/src/git_diff.rs\\nnew file mode 100644\\nindex 0000000..696a54e\\n--- /dev/null\\n+++ b/custom/mcp-tools/src/git_diff.rs\\n@@ -0,0 +1,51 @@\\n+use "
+    },
+    "bash": {
+      "avg_ms": 2.5267871998948976,
+      "min_ms": 2.1151339997231844,
+      "output_bytes": 3825,
+      "approx_tokens": 956,
+      "output_preview": "diff --git a/custom/mcp-tools/src/git_diff.rs b/custom/mcp-tools/src/git_diff.rs\\nnew file mode 100644\\nindex 0000000..696a54e\\n--- /dev/null\\n+++ b/custom/mcp-tools/src/git_diff.rs\\n@@ -0,0 +1,51 @@\\n+use "
+    }
+  },
+  "B1_grep_large": {
+    "mcp": {
+      "avg_ms": 3.9893896000648965,
+      "min_ms": 3.531440000188013,
+      "output_bytes": 16139,
+      "approx_tokens": 4034,
+      "output_preview": "/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aho-corasick-1.1.4/DESIGN.md:107:     fn has_prefix(trie: &Trie, haystack: &[u8]) -> bool {\\n/home/kazukiazuma/.cargo/registry/src"
+    },
+    "bash": {
+      "avg_ms": 40.29106200032402,
+      "min_ms": 37.931892000415246,
+      "output_bytes": 2371358,
+      "approx_tokens": 592839,
+      "output_preview": "/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/benches/xid.rs:32:fn gen_string(p_nonascii: u32) -> String {\\n/home/kazukiazuma/.cargo/registry/src/index.cra"
+    }
+  },
+  "B2_find_large": {
+    "mcp": {
+      "avg_ms": 1.9924309999623802,
+      "min_ms": 1.4187329998094356,
+      "output_bytes": 21542,
+      "approx_tokens": 5385,
+      "output_preview": "/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aho-corasick-1.1.4/src/ahocorasick.rs\\n/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aho-corasick-1.1.4/s"
+    },
+    "bash": {
+      "avg_ms": 3.229328599809378,
+      "min_ms": 2.949703999547637,
+      "output_bytes": 66291,
+      "approx_tokens": 16572,
+      "output_preview": "/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/benches/xid.rs\\n/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/s"
+    }
+  },
+  "C_warm_server": {
+    "mcp": {
+      "avg_ms": 0.26249769998685224,
+      "total_ms": 2.6249769998685224
+    },
+    "bash": {
+      "avg_ms": 1.4015826999639103,
+      "total_ms": 14.015826999639103
+    }
+  }
+}
