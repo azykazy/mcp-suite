@@ -3,6 +3,7 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+CLAUDE_JSON="$HOME/.claude.json"
 MCP_CONFIG="$REPO_DIR/config/mcp_settings.json"
 ENV_FILE="$REPO_DIR/.env"
 export MCP_SUITE_DIR="$REPO_DIR"
@@ -41,10 +42,9 @@ load_env() {
   fi
 }
 
-# Claude Code の settings.json に mcpServers をマージ
+# Claude Code v2: ~/.claude.json に mcpServers をマージ
+# （v1 では ~/.claude/settings.json だったが v2 で移動）
 configure_claude() {
-  mkdir -p "$(dirname "$CLAUDE_SETTINGS")"
-
   # 環境変数を展開した一時ファイルを作成（node使用でmacOS互換）
   local tmp_config
   tmp_config=$(mktemp)
@@ -53,21 +53,21 @@ configure_claude() {
     process.stdout.write(c.replace(/\\\${(\w+)}/g, (_, k) => process.env[k] ?? ''));
   " "$MCP_CONFIG" > "$tmp_config"
 
-  if [ ! -f "$CLAUDE_SETTINGS" ]; then
-    echo '{}' > "$CLAUDE_SETTINGS"
+  if [ ! -f "$CLAUDE_JSON" ]; then
+    echo '{}' > "$CLAUDE_JSON"
   fi
 
   # 既存設定をバックアップしてからマージ
-  local backup="$CLAUDE_SETTINGS.bak.$(date +%Y%m%d%H%M%S)"
-  cp "$CLAUDE_SETTINGS" "$backup"
+  local backup="$CLAUDE_JSON.bak.$(date +%Y%m%d%H%M%S)"
+  cp "$CLAUDE_JSON" "$backup"
   echo "[OK] 設定バックアップ: $backup"
 
   jq --slurpfile mcp "$tmp_config" '.mcpServers = $mcp[0].mcpServers' \
-    "$CLAUDE_SETTINGS" > "$tmp_config.merged"
-  mv "$tmp_config.merged" "$CLAUDE_SETTINGS"
+    "$CLAUDE_JSON" > "$tmp_config.merged"
+  mv "$tmp_config.merged" "$CLAUDE_JSON"
   rm -f "$tmp_config"
 
-  echo "[OK] mcpServers を $CLAUDE_SETTINGS に設定しました"
+  echo "[OK] mcpServers を $CLAUDE_JSON に設定しました"
 }
 
 # カスタムMCPのビルド
