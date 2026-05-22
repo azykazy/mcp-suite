@@ -5,6 +5,7 @@ use serde::Deserialize;
 use serde_json::{json, Value};
 
 mod diff;
+mod file_outline;
 mod find;
 mod git_diff;
 mod git_log;
@@ -219,6 +220,20 @@ fn tools_list() -> Value {
             }
         },
         {
+            "name": "file_outline",
+            "description": "Extract function/class/struct/type signatures from a source file. Returns line numbers and signatures only — no function bodies. Supported: .rs .py .ts .tsx .js .jsx .go. Token-efficient alternative to reading whole files.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "Path to the source file"
+                    }
+                },
+                "required": ["path"]
+            }
+        },
+        {
             "name": "find",
             "description": "Find files or directories matching a pattern. Returns newline-separated paths. Token-efficient.",
             "inputSchema": {
@@ -256,6 +271,7 @@ fn call_tool(name: &str, args: &Value) -> Result<String> {
     match name {
         "grep" => grep::run(args),
         "diff" => diff::run(args),
+        "file_outline" => file_outline::run(args),
         "git_diff" => git_diff::run(args),
         "git_log" => git_log::run(args),
         "find" => find::run(args),
