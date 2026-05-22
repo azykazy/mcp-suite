@@ -7,8 +7,6 @@
 ```bash
 git clone https://github.com/azykazy/mcp-suite.git
 cd mcp-suite
-cp .env.example .env
-vi .env          # GITHUB_PERSONAL_ACCESS_TOKEN など必要な値を設定
 bash setup.sh
 ```
 
@@ -22,12 +20,10 @@ mcp-suite/
 ├── config/
 │   └── mcp_settings.json # MCPサーバー設定テンプレート
 ├── custom/               # 自作MCPサーバー（ソースコード管理）
-│   └── <mcp-name>/
-├── oss/                  # OSSのMCP情報・参照
-│   ├── context7/         # ドキュメント取得MCP
-│   ├── github/           # GitHub操作MCP
-│   └── playwright/       # ブラウザ操作MCP
-└── .env.example          # 環境変数テンプレート
+│   └── mcp-tools/        # grep / diff / find（Rust実装）
+└── oss/                  # OSSのMCP情報・参照
+    ├── context7/         # ドキュメント取得MCP
+    └── playwright/       # ブラウザ操作MCP
 ```
 
 ## 含まれるMCP
@@ -37,7 +33,6 @@ mcp-suite/
 | MCP | 用途 | パッケージ |
 |-----|------|-----------|
 | context7 | ライブラリドキュメント取得 | `@upstash/context7-mcp` |
-| GitHub | GitHub API操作 | `@modelcontextprotocol/server-github` |
 | Playwright | ブラウザ操作 | `@playwright/mcp` |
 
 ### 自作
@@ -53,12 +48,6 @@ mcp-suite/
 1. `custom/<mcp-name>/` にソースを配置
 2. `config/mcp_settings.json` に `mcpServers` エントリを追加
 3. `bash setup.sh` を再実行
-
-## 必要な環境変数
-
-| 変数 | 用途 | 必須 |
-|------|------|------|
-| `GITHUB_PERSONAL_ACCESS_TOKEN` | GitHub MCP認証 | GitHub MCP使用時 |
 
 ## 前提条件
 
