@@ -7,6 +7,7 @@ use serde_json::{json, Value};
 mod diff;
 mod find;
 mod git_diff;
+mod git_log;
 mod grep;
 
 #[derive(Deserialize)]
@@ -188,6 +189,36 @@ fn tools_list() -> Value {
             }
         },
         {
+            "name": "git_log",
+            "description": "Show compact git commit history. Returns hash, date, author, subject per line. Token-efficient.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "repo": {
+                        "type": "string",
+                        "description": "Path to the git repository (default: \".\")"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "description": "Maximum number of commits to return (default: 20)"
+                    },
+                    "from": {
+                        "type": "string",
+                        "description": "Start ref (exclusive). Shows commits from this ref to `to` (or HEAD). E.g. \"HEAD~5\" or \"main\""
+                    },
+                    "to": {
+                        "type": "string",
+                        "description": "End ref (inclusive). Used together with `from` (default: HEAD)"
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "Limit history to commits touching this file or directory"
+                    }
+                },
+                "required": []
+            }
+        },
+        {
             "name": "find",
             "description": "Find files or directories matching a pattern. Returns newline-separated paths. Token-efficient.",
             "inputSchema": {
@@ -226,6 +257,7 @@ fn call_tool(name: &str, args: &Value) -> Result<String> {
         "grep" => grep::run(args),
         "diff" => diff::run(args),
         "git_diff" => git_diff::run(args),
+        "git_log" => git_log::run(args),
         "find" => find::run(args),
         other => anyhow::bail!("Unknown tool: {other}"),
     }
