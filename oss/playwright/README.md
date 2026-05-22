@@ -1,0 +1,11 @@
+# Playwright MCP
+
+ブラウザを操作するMCPサーバー。
+
+- パッケージ: `@playwright/mcp`
+- 実行方式: `npx @playwright/mcp@latest`
+- 環境変数: 不要
+
+## 参考
+
+- https://github.com/microsoft/playwright-mcp
