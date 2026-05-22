@@ -6,6 +6,7 @@ use serde_json::{json, Value};
 
 mod diff;
 mod find;
+mod git_diff;
 mod grep;
 
 #[derive(Deserialize)]
@@ -149,6 +150,40 @@ fn tools_list() -> Value {
             }
         },
         {
+            "name": "git_diff",
+            "description": "Run git diff in a repository. Supports working tree, staged, and commit-range diffs. Token-efficient.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "repo": {
+                        "type": "string",
+                        "description": "Path to the git repository (default: \".\")"
+                    },
+                    "staged": {
+                        "type": "boolean",
+                        "description": "Show staged changes (--staged). Default: false"
+                    },
+                    "from": {
+                        "type": "string",
+                        "description": "Start ref (commit, branch, tag). E.g. \"HEAD~1\" or \"main\""
+                    },
+                    "to": {
+                        "type": "string",
+                        "description": "End ref. Used together with `from`"
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "Limit diff to a specific file or directory"
+                    },
+                    "context": {
+                        "type": "integer",
+                        "description": "Context lines around changes (default: 3)"
+                    }
+                },
+                "required": []
+            }
+        },
+        {
             "name": "find",
             "description": "Find files or directories matching a pattern. Returns newline-separated paths. Token-efficient.",
             "inputSchema": {
@@ -186,6 +221,7 @@ fn call_tool(name: &str, args: &Value) -> Result<String> {
     match name {
         "grep" => grep::run(args),
         "diff" => diff::run(args),
+        "git_diff" => git_diff::run(args),
         "find" => find::run(args),
         other => anyhow::bail!("Unknown tool: {other}"),
     }
