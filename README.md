@@ -5,7 +5,7 @@
 ## クイックスタート
 
 ```bash
-git clone https://github.com/kaz-azuma/mcp-suite.git
+git clone https://github.com/azykazy/mcp-suite.git
 cd mcp-suite
 cp .env.example .env
 vi .env          # GITHUB_PERSONAL_ACCESS_TOKEN など必要な値を設定
