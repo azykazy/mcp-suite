@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLAUDE_SETTINGS="$HOME/.claude/settings.json"
+MCP_CONFIG="$REPO_DIR/config/mcp_settings.json"
+ENV_FILE="$REPO_DIR/.env"
+
+echo "=== mcp-suite setup ==="
+
+# 前提チェック
+check_deps() {
+  local missing=()
+  command -v node >/dev/null 2>&1 || missing+=("node")
+  command -v npx  >/dev/null 2>&1 || missing+=("npx")
+  command -v jq   >/dev/null 2>&1 || missing+=("jq")
+  if [ ${#missing[@]} -ne 0 ]; then
+    echo "ERROR: 以下のツールが見つかりません: ${missing[*]}"
+    echo "  node/npx: https://nodejs.org"
+    echo "  jq: sudo apt install jq  または  brew install jq"
+    exit 1
+  fi
+  echo "[OK] 依存ツール確認済み (node=$(node -v), jq=$(jq --version))"
+}
+
+# .env の読み込み
+load_env() {
+  if [ -f "$ENV_FILE" ]; then
+    set -a
+    # shellcheck disable=SC1090
+    source "$ENV_FILE"
+    set +a
+    echo "[OK] .env を読み込みました"
+  else
+    echo "[WARN] .env が見つかりません。.env.example をコピーして編集してください:"
+    echo "  cp $REPO_DIR/.env.example $ENV_FILE"
+    echo "  vi $ENV_FILE"
+    echo ""
+    echo "  続行しますが、環境変数が未設定のMCPは動作しません。"
+  fi
+}
+
+# Claude Code の settings.json に mcpServers をマージ
+configure_claude() {
+  mkdir -p "$(dirname "$CLAUDE_SETTINGS")"
+
+  # 環境変数を展開した一時ファイルを作成（node使用でmacOS互換）
+  local tmp_config
+  tmp_config=$(mktemp)
+  node -e "
+    const c = require('fs').readFileSync(process.argv[1], 'utf8');
+    process.stdout.write(c.replace(/\\\${(\w+)}/g, (_, k) => process.env[k] ?? ''));
+  " "$MCP_CONFIG" > "$tmp_config"
+
+  if [ ! -f "$CLAUDE_SETTINGS" ]; then
+    echo '{}' > "$CLAUDE_SETTINGS"
+  fi
+
+  # 既存設定をバックアップしてからマージ
+  local backup="$CLAUDE_SETTINGS.bak.$(date +%Y%m%d%H%M%S)"
+  cp "$CLAUDE_SETTINGS" "$backup"
+  echo "[OK] 設定バックアップ: $backup"
+
+  jq --slurpfile mcp "$tmp_config" '. * {mcpServers: $mcp[0].mcpServers}' \
+    "$CLAUDE_SETTINGS" > "$tmp_config.merged"
+  mv "$tmp_config.merged" "$CLAUDE_SETTINGS"
+  rm -f "$tmp_config"
+
+  echo "[OK] mcpServers を $CLAUDE_SETTINGS に設定しました"
+}
+
+# カスタムMCPのビルド
+build_custom_mcps() {
+  local custom_dir="$REPO_DIR/custom"
+  if [ ! -d "$custom_dir" ] || [ -z "$(ls -A "$custom_dir" 2>/dev/null)" ]; then
+    echo "[SKIP] custom/ にMCPが見つかりません"
+    return
+  fi
+
+  for mcp_dir in "$custom_dir"/*/; do
+    [ -d "$mcp_dir" ] || continue
+    local name
+    name=$(basename "$mcp_dir")
+    echo "  ビルド: $name"
+
+    if [ -f "$mcp_dir/package.json" ]; then
+      (cd "$mcp_dir" && npm install && npm run build 2>/dev/null || true)
+    elif [ -f "$mcp_dir/go.mod" ]; then
+      (cd "$mcp_dir" && go build ./...)
+    else
+      echo "  [SKIP] $name: ビルド方法が不明（package.json / go.mod なし）"
+    fi
+  done
+}
+
+main() {
+  check_deps
+  load_env
+  build_custom_mcps
+  configure_claude
+  echo ""
+  echo "=== セットアップ完了 ==="
+  echo "Claude Code を再起動してMCPを有効化してください。"
+}
+
+main "$@"
