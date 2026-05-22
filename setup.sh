@@ -5,6 +5,7 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_SETTINGS="$HOME/.claude/settings.json"
 MCP_CONFIG="$REPO_DIR/config/mcp_settings.json"
 ENV_FILE="$REPO_DIR/.env"
+export MCP_SUITE_DIR="$REPO_DIR"
 
 echo "=== mcp-suite setup ==="
 
@@ -85,10 +86,17 @@ build_custom_mcps() {
 
     if [ -f "$mcp_dir/package.json" ]; then
       (cd "$mcp_dir" && npm install && npm run build 2>/dev/null || true)
+    elif [ -f "$mcp_dir/Cargo.toml" ]; then
+      if command -v cargo >/dev/null 2>&1; then
+        (cd "$mcp_dir" && cargo build --release)
+        echo "  [OK] $name: Rustビルド完了"
+      else
+        echo "  [SKIP] $name: cargo が見つかりません。rustup で Rust をインストールしてください。"
+      fi
     elif [ -f "$mcp_dir/go.mod" ]; then
       (cd "$mcp_dir" && go build ./...)
     else
-      echo "  [SKIP] $name: ビルド方法が不明（package.json / go.mod なし）"
+      echo "  [SKIP] $name: ビルド方法が不明（package.json / Cargo.toml / go.mod なし）"
     fi
   done
 }

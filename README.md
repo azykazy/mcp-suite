@@ -42,7 +42,11 @@ mcp-suite/
 
 ### 自作
 
-`custom/` ディレクトリ以下に配置。詳細は各ディレクトリの README を参照。
+| MCP | 用途 | 実装 |
+|-----|------|------|
+| [mcp-tools](custom/mcp-tools/) | grep / diff / find（低トークン・高速） | Rust |
+
+詳細は各ディレクトリの README を参照。
 
 ## 自作MCPの追加
 
@@ -60,3 +64,4 @@ mcp-suite/
 
 - Node.js 18+
 - jq（`sudo apt install jq` または `brew install jq`）
+- Rust / cargo（mcp-tools ビルド用、`curl https://sh.rustup.rs -sSf | sh` または `mise use rust`）

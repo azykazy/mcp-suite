@@ -14,6 +14,9 @@
     "playwright": {
       "command": "npx",
       "args": ["@playwright/mcp@latest"]
+    },
+    "mcp-tools": {
+      "command": "${MCP_SUITE_DIR}/custom/mcp-tools/target/release/mcp-tools"
     }
   }
 }
