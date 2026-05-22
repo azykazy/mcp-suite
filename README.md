@@ -25,8 +25,11 @@ mcp-suite/
 │   ├── context7/         # ドキュメント取得MCP
 │   └── playwright/       # ブラウザ操作MCP
 └── agents/               # Claude Code サブエージェント定義
-    ├── code-reviewer-ja.md  # 日本語コードレビュー専門エージェント
-    └── git-workflow-ja.md   # Gitワークフロー専門エージェント
+    ├── code-reviewer-ja.md  # PR前の品質・設計レビュー（読み取り専用）
+    ├── security-reviewer.md # セキュリティレビュー（読み取り専用）
+    ├── debugger.md          # バグ・エラー原因調査（Bash可・編集不可）
+    ├── test-writer.md       # テストケース設計・実装
+    └── git-workflow-ja.md   # Gitワークフロー担当
 ```
 
 ## 含まれるMCP
@@ -45,6 +48,18 @@ mcp-suite/
 | [mcp-tools](custom/mcp-tools/) | grep / diff / find（低トークン・高速） | Rust |
 
 詳細は各ディレクトリの README を参照。
+
+## 含まれるサブエージェント
+
+| エージェント | 権限 | 用途 |
+|------------|------|------|
+| code-reviewer-ja | 読み取り専用 | PR前の品質・設計レビュー（日本語） |
+| security-reviewer | 読み取り専用 | OWASP Top 10 ベースのセキュリティレビュー |
+| debugger | Read + Bash | エラー・バグの原因調査 |
+| test-writer | フルアクセス | テストケースの設計・実装 |
+| git-workflow-ja | フルアクセス | ブランチ作成〜PRのGitワークフロー |
+
+詳細は [agents/README.md](agents/README.md) を参照。
 
 ## 自作MCPの追加
 
