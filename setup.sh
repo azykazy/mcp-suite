@@ -62,7 +62,7 @@ configure_claude() {
   cp "$CLAUDE_SETTINGS" "$backup"
   echo "[OK] 設定バックアップ: $backup"
 
-  jq --slurpfile mcp "$tmp_config" '. * {mcpServers: $mcp[0].mcpServers}' \
+  jq --slurpfile mcp "$tmp_config" '.mcpServers = $mcp[0].mcpServers' \
     "$CLAUDE_SETTINGS" > "$tmp_config.merged"
   mv "$tmp_config.merged" "$CLAUDE_SETTINGS"
   rm -f "$tmp_config"
