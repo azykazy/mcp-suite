@@ -122,6 +122,10 @@ fn tools_list() -> Value {
                     "max_matches": {
                         "type": "integer",
                         "description": "Maximum matches to return (default: 100)"
+                    },
+                    "no_ignore": {
+                        "type": "boolean",
+                        "description": "If true, ignore .gitignore rules and search all files (default: false)"
                     }
                 },
                 "required": ["pattern", "paths"]

@@ -1,11 +1,11 @@
 use anyhow::{Context, Result};
+use ignore::WalkBuilder;
 use regex::RegexBuilder;
 use serde_json::Value;
 use std::collections::HashSet;
 use std::fs;
 use std::io::{BufRead, BufReader, Read};
 use std::path::{Path, PathBuf};
-use walkdir::WalkDir;
 
 pub fn run(args: &Value) -> Result<String> {
     let pattern = args["pattern"]
@@ -20,6 +20,7 @@ pub fn run(args: &Value) -> Result<String> {
     let context = args["context"].as_u64().unwrap_or(0) as usize;
     let ignore_case = args["ignore_case"].as_bool().unwrap_or(false);
     let max_matches = args["max_matches"].as_u64().unwrap_or(100) as usize;
+    let no_ignore = args["no_ignore"].as_bool().unwrap_or(false);
 
     let re = RegexBuilder::new(pattern)
         .case_insensitive(ignore_case)
@@ -38,13 +39,19 @@ pub fn run(args: &Value) -> Result<String> {
         }
 
         let files: Vec<PathBuf> = if path.is_dir() {
-            WalkDir::new(path)
-                .sort_by_file_name()
-                .into_iter()
+            let mut entries: Vec<PathBuf> = WalkBuilder::new(path)
+                .hidden(false)
+                .git_ignore(!no_ignore)
+                .git_global(!no_ignore)
+                .git_exclude(!no_ignore)
+                .ignore(!no_ignore)
+                .build()
                 .filter_map(|e| e.ok())
-                .filter(|e| e.file_type().is_file())
-                .map(|e| e.into_path())
-                .collect()
+                .filter(|e| e.file_type().map(|t| t.is_file()).unwrap_or(false))
+                .map(|e| e.path().to_path_buf())
+                .collect();
+            entries.sort();
+            entries
         } else {
             vec![path.to_path_buf()]
         };
