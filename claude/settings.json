@@ -1,0 +1,81 @@
+{
+  "env": {},
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git branch*)",
+      "Bash(git checkout*)",
+      "Bash(git switch*)",
+      "Bash(git stash*)",
+      "Bash(git fetch*)",
+      "Bash(git rebase*)",
+      "Bash(ls*)",
+      "Bash(mkdir*)",
+      "Bash(rm*)",
+      "Bash(cp*)",
+      "Bash(mv*)",
+      "Bash(npm*)",
+      "Bash(yarn*)",
+      "Bash(pnpm*)",
+      "Bash(npx*)",
+      "Bash(go *)",
+      "Bash(python*)",
+      "Bash(pip*)",
+      "Bash(cargo*)",
+      "Bash(make*)",
+      "mcp__mcp-tools__grep",
+      "mcp__mcp-tools__find",
+      "mcp__mcp-tools__diff",
+      "mcp__mcp-tools__git_diff",
+      "mcp__mcp-tools__directory_tree",
+      "mcp__mcp-tools__file_outline",
+      "mcp__mcp-tools__git_log"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "path=$(echo \"$CLAUDE_TOOL_INPUT\" | python3 -c \"import sys,json,os; d=json.load(sys.stdin); print(os.path.expanduser(d.get('file_path','')))\" 2>/dev/null); pr=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PWD\"); case \"$path\" in \"$HOME/.claude\"*|\"$pr\"|\"$pr\"/*) ;; \"$HOME\"/*) echo \"[アクセス制限] プロジェクト外へのアクセスは禁止です: $path (許可範囲: $pr)\" >&2; exit 1;; esac"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pr=$(git rev-parse --show-toplevel 2>/dev/null || echo \"$PWD\"); cmd=$(echo \"$CLAUDE_TOOL_INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('command',''))\" 2>/dev/null); blocked=$(echo \"$cmd\" | python3 -c \"import sys,os,re; cmd=sys.stdin.read(); h=os.path.expanduser('~'); pr='$pr'.rstrip('/'); matches=[m.group(0) for m in re.finditer(r'(?:~|'+re.escape(h)+r')/\\S+',cmd) if not (lambda f:f==pr or f.startswith(pr+'/')or f.startswith(h+'/.claude'))(m.group(0).replace('~',h))]; print(matches[0] if matches else '')\" 2>/dev/null); if [ -n \"$blocked\" ]; then echo \"[アクセス制限] プロジェクト外へのアクセスは禁止です: $blocked\" >&2; exit 1; fi; if echo \"$cmd\" | grep -qE 'git (commit|push)'; then branch=$(git branch --show-current 2>/dev/null); if [ \"$branch\" = 'main' ] || [ \"$branch\" = 'master' ]; then echo \"[ブランチ保護] mainブランチへの直接コミット/プッシュは禁止です。feat/fix/hotfix/chore/refactor プレフィックスのブランチを作成してから作業してください。\" >&2; exit 1; fi; fi"
+          },
+          {
+            "type": "command",
+            "command": "cmd=$(echo \"$CLAUDE_TOOL_INPUT\" | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('command',''))\" 2>/dev/null); tool=$(echo \"$cmd\" | python3 -c \"import sys,re; cmd=sys.stdin.read(); m=re.search(r'(?:^|[|;&\\s])(grep|find|tree)(?=\\s)', cmd); print(m.group(1) if m else '')\" 2>/dev/null); if [ -n \"$tool\" ]; then echo \"[MCP優先ルール] Bash の '$tool' は禁止です。mcp-tools の対応ツールを使用してください（低トークン・高速）。\" >&2; exit 1; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "serena@claude-plugins-official": true,
+    "everything-claude-code@everything-claude-code": true
+  },
+  "extraKnownMarketplaces": {
+    "everything-claude-code": {
+      "source": {
+        "source": "github",
+        "repo": "affaan-m/everything-claude-code"
+      }
+    }
+  },
+  "language": "Japanese"
+}

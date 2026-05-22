@@ -101,6 +101,30 @@ build_custom_mcps() {
   done
 }
 
+# CLAUDE.md と settings.json を ~/.claude/ へ同期
+install_claude_config() {
+  local src_dir="$REPO_DIR/claude"
+  local target_dir="$HOME/.claude"
+
+  mkdir -p "$target_dir"
+
+  for file in CLAUDE.md settings.json; do
+    local src="$src_dir/$file"
+    local dst="$target_dir/$file"
+    [ -f "$src" ] || continue
+
+    if [ -f "$dst" ] && ! diff -q "$src" "$dst" > /dev/null 2>&1; then
+      local backup="$dst.bak.$(date +%Y%m%d%H%M%S)"
+      cp "$dst" "$backup"
+      echo "  [OK] バックアップ: $backup"
+    fi
+    cp "$src" "$dst"
+    echo "  [OK] $file → $dst"
+  done
+
+  echo "[OK] Claude 設定を $target_dir に同期しました"
+}
+
 # サブエージェントを ~/.claude/agents/ へインストール
 install_agents() {
   local agents_dir="$REPO_DIR/agents"
@@ -130,6 +154,7 @@ main() {
   load_env
   build_custom_mcps
   configure_claude
+  install_claude_config
   install_agents
   echo ""
   echo "=== セットアップ完了 ==="
