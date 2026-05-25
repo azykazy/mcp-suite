@@ -80,7 +80,7 @@ git checkout main   # または git checkout master
 
 以下の操作は Bash の標準コマンドではなく、**mcp-tools の MCP 版を優先して使うこと**。低トークン・高速で動作し、大量出力による文脈汚染を防ぐ。
 
-| 操作 | Bash（非推奨） | MCP ツール（推奨） |
+| 操作 | 非推奨 | MCP ツール（推奨） |
 |------|--------------|-----------------|
 | ファイル内文字列検索 | `grep` | `mcp-tools: grep` |
 | ファイル・ディレクトリ探索 | `find` | `mcp-tools: find` |
@@ -89,8 +89,26 @@ git checkout main   # または git checkout master
 | ディレクトリ構造確認 | `tree` | `mcp-tools: directory_tree` |
 | ファイルシンボル一覧 | `grep`（関数・クラス抽出） | `mcp-tools: file_outline` |
 | Git コミット履歴確認 | `git log` | `mcp-tools: git_log` |
+| URL コンテンツ取得 | `WebFetch` | `mcp-tools: web_fetch` |
 
 Bash を使ってよいのは、MCP ツールでは対応できない操作（ビルド・テスト実行・パイプ処理など）に限る。
+
+### web_fetch の使い方
+
+`WebFetch` の代わりに常に `mcp-tools: web_fetch` を使うこと。HTML を Markdown に変換して返すため、トークン数を削減しつつリンク・コードブロック・テーブル構造を保持できる。
+
+```
+# ページ全体を取得
+web_fetch(url="https://example.com")
+
+# 特定セクションのみ取得（さらにトークン削減）
+web_fetch(url="https://docs.rs/anyhow/latest/anyhow/", selector="main")
+
+# 文字数上限を指定
+web_fetch(url="https://example.com", max_chars=4000)
+```
+
+`selector` には CSS セレクタを指定できる（例: `"main"`, `"article"`, `".content"`）。大規模なリファレンスページでは必ず `selector` で対象を絞ること。
 
 ---
 

@@ -11,6 +11,7 @@ mod find;
 mod git_diff;
 mod git_log;
 mod grep;
+mod web_fetch;
 
 #[derive(Deserialize)]
 struct RpcRequest {
@@ -286,6 +287,28 @@ fn tools_list() -> Value {
                 },
                 "required": ["path"]
             }
+        },
+        {
+            "name": "web_fetch",
+            "description": "Fetch a URL and extract readable text from HTML. Strips scripts/styles and returns clean content. Token-efficient alternative to WebFetch.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "description": "URL to fetch"
+                    },
+                    "max_chars": {
+                        "type": "integer",
+                        "description": "Maximum characters to return. Omit to return full content."
+                    },
+                    "selector": {
+                        "type": "string",
+                        "description": "CSS selector to extract specific section (e.g. \"article\", \"main\", \".content\"). Optional."
+                    }
+                },
+                "required": ["url"]
+            }
         }
     ])
 }
@@ -299,6 +322,7 @@ fn call_tool(name: &str, args: &Value) -> Result<String> {
         "git_diff" => git_diff::run(args),
         "git_log" => git_log::run(args),
         "find" => find::run(args),
+        "web_fetch" => web_fetch::run(args),
         other => anyhow::bail!("Unknown tool: {other}"),
     }
 }

@@ -16,6 +16,11 @@ similar = { version = "2", features = ["text"] }
 walkdir = "2"
 ignore = "0.4"
 anyhow = "1"
+ureq = { version = "2", features = ["tls"] }
+rustls = { version = "0.23", default-features = false }
+rustls-pemfile = "2"
+scraper = "0.20"
+ego-tree = "0.6"
 
 [profile.release]
 opt-level = 3
