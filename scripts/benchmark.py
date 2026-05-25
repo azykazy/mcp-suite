@@ -3,20 +3,22 @@
 自作MCPツール vs 標準Bashコマンドのベンチマーク
 
 測定項目:
-  - 実行時間 (ms)
+  - 実行時間 (ms): avg, min, p95, stdev
   - 出力バイト数（トークン数の近似: bytes / 4）
 
 テストシナリオ:
   A. 小規模: mcp-tools/src（5ファイル）
-  B. 大規模: .cargo/registry（612ファイル、14000+マッチ）
+  B. 大規模: .cargo/registry（600+ファイル）
   C. ウォームサーバー: MCP永続プロセスvs都度Bashプロセス起動
 """
 
+import argparse
+import datetime
 import json
 import subprocess
 import time
 import os
-import threading
+import statistics
 
 MCP_BINARY = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -25,6 +27,14 @@ MCP_BINARY = os.path.join(
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(REPO, "custom/mcp-tools/src")
 LARGE_DIR = os.path.expanduser("~/.cargo/registry/src")
+
+
+def _percentile(sorted_data: list, pct: float) -> float:
+    if not sorted_data:
+        return 0.0
+    k = (len(sorted_data) - 1) * pct / 100
+    lo, hi = int(k), min(int(k) + 1, len(sorted_data) - 1)
+    return sorted_data[lo] + (sorted_data[hi] - sorted_data[lo]) * (k - lo)
 
 
 def call_mcp(tool: str, arguments: dict, runs: int = 5) -> dict:
@@ -60,13 +70,14 @@ def call_mcp(tool: str, arguments: dict, runs: int = 5) -> dict:
             except json.JSONDecodeError:
                 continue
 
-    avg_ms = sum(elapsed_list) / len(elapsed_list)
-    min_ms = min(elapsed_list)
+    sorted_elapsed = sorted(elapsed_list)
     output_bytes = len(output_text.encode("utf-8"))
 
     return {
-        "avg_ms": avg_ms,
-        "min_ms": min_ms,
+        "avg_ms": sum(elapsed_list) / len(elapsed_list),
+        "min_ms": min(elapsed_list),
+        "p95_ms": _percentile(sorted_elapsed, 95),
+        "stdev_ms": statistics.stdev(elapsed_list) if len(elapsed_list) > 1 else 0.0,
         "output_bytes": output_bytes,
         "approx_tokens": max(1, output_bytes // 4),
         "output_preview": output_text[:200].replace("\n", "\\n"),
@@ -131,13 +142,14 @@ def call_bash(cmd: list, runs: int = 5) -> dict:
         elapsed_list.append((t1 - t0) * 1000)
         output_text = proc.stdout.decode(errors="replace")
 
-    avg_ms = sum(elapsed_list) / len(elapsed_list)
-    min_ms = min(elapsed_list)
+    sorted_elapsed = sorted(elapsed_list)
     output_bytes = len(output_text.encode("utf-8"))
 
     return {
-        "avg_ms": avg_ms,
-        "min_ms": min_ms,
+        "avg_ms": sum(elapsed_list) / len(elapsed_list),
+        "min_ms": min(elapsed_list),
+        "p95_ms": _percentile(sorted_elapsed, 95),
+        "stdev_ms": statistics.stdev(elapsed_list) if len(elapsed_list) > 1 else 0.0,
         "output_bytes": output_bytes,
         "approx_tokens": max(1, output_bytes // 4),
         "output_preview": output_text[:200].replace("\n", "\\n"),
@@ -153,17 +165,27 @@ def ratio(mcp_val, bash_val):
 
 def print_result(label, mcp, bash):
     print(f"\n#### {label}")
-    print(f"{'指標':<22} {'MCP':>12} {'Bash':>12} {'Bash/MCP':>12}")
-    print("-" * 62)
-    print(f"{'平均実行時間(ms)':<22} {mcp['avg_ms']:>12.1f} {bash['avg_ms']:>12.1f} {ratio(mcp['avg_ms'], bash['avg_ms']):>12}")
-    print(f"{'最小実行時間(ms)':<22} {mcp['min_ms']:>12.1f} {bash['min_ms']:>12.1f} {ratio(mcp['min_ms'], bash['min_ms']):>12}")
-    print(f"{'出力バイト数':<22} {mcp['output_bytes']:>12,} {bash['output_bytes']:>12,} {ratio(mcp['output_bytes'], bash['output_bytes']):>12}")
-    print(f"{'概算トークン数':<22} {mcp['approx_tokens']:>12,} {bash['approx_tokens']:>12,} {ratio(mcp['approx_tokens'], bash['approx_tokens']):>12}")
+    print(f"{'指標':<22} {'MCP':>10} {'Bash':>10} {'Bash/MCP':>10}")
+    print("-" * 56)
+    print(f"{'平均実行時間(ms)':<22} {mcp['avg_ms']:>10.1f} {bash['avg_ms']:>10.1f} {ratio(mcp['avg_ms'], bash['avg_ms']):>10}")
+    print(f"{'最小実行時間(ms)':<22} {mcp['min_ms']:>10.1f} {bash['min_ms']:>10.1f} {ratio(mcp['min_ms'], bash['min_ms']):>10}")
+    print(f"{'p95実行時間(ms)':<22} {mcp['p95_ms']:>10.1f} {bash['p95_ms']:>10.1f} {ratio(mcp['p95_ms'], bash['p95_ms']):>10}")
+    print(f"{'標準偏差(ms)':<22} {mcp['stdev_ms']:>10.2f} {bash['stdev_ms']:>10.2f} {'':>10}")
+    print(f"{'出力バイト数':<22} {mcp['output_bytes']:>10,} {bash['output_bytes']:>10,} {ratio(mcp['output_bytes'], bash['output_bytes']):>10}")
+    print(f"{'概算トークン数':<22} {mcp['approx_tokens']:>10,} {bash['approx_tokens']:>10,} {ratio(mcp['approx_tokens'], bash['approx_tokens']):>10}")
 
 
 def main():
+    parser = argparse.ArgumentParser(description="MCP Tools vs Bash ベンチマーク")
+    parser.add_argument("--runs", type=int, default=5, metavar="N",
+                        help="各ケースの計測回数 (デフォルト: 5)")
+    parser.add_argument("--output", default=None, metavar="FILE",
+                        help="結果JSONの出力先 (デフォルト: scripts/benchmark_results.json)")
+    cli = parser.parse_args()
+    runs = cli.runs
+
     print("=" * 70)
-    print("MCP Tools ベンチマーク (各5回計測の平均)")
+    print(f"MCP Tools ベンチマーク (各{runs}回計測の平均)")
     print(f"対象リポジトリ: {REPO}")
     print("=" * 70)
 
@@ -173,53 +195,104 @@ def main():
     print("\n\n## シナリオA: 小規模（mcp-tools/src/ - 5ファイル）")
 
     print("\n[A-1] grep: 'fn ' を src/ で検索")
-    a1_mcp = call_mcp("grep", {"pattern": "fn ", "paths": [SRC]})
-    a1_bash = call_bash(["grep", "-rn", "fn ", SRC])
+    a1_mcp = call_mcp("grep", {"pattern": "fn ", "paths": [SRC]}, runs)
+    a1_bash = call_bash(["grep", "-rn", "fn ", SRC], runs)
     print_result("grep (小規模)", a1_mcp, a1_bash)
     results["A1_grep_small"] = {"mcp": a1_mcp, "bash": a1_bash}
 
     print("\n[A-2] find: src/ 以下のファイルを列挙")
-    a2_mcp = call_mcp("find", {"path": SRC, "type": "f"})
-    a2_bash = call_bash(["find", SRC, "-type", "f"])
+    a2_mcp = call_mcp("find", {"path": SRC, "type": "f"}, runs)
+    a2_bash = call_bash(["find", SRC, "-type", "f"], runs)
     print_result("find (小規模)", a2_mcp, a2_bash)
     results["A2_find_small"] = {"mcp": a2_mcp, "bash": a2_bash}
 
     print("\n[A-3] diff: main.rs vs grep.rs")
     file_a = os.path.join(SRC, "main.rs")
     file_b = os.path.join(SRC, "grep.rs")
-    a3_mcp = call_mcp("diff", {"a": file_a, "b": file_b})
-    a3_bash = call_bash(["diff", "-u", file_a, file_b])
+    a3_mcp = call_mcp("diff", {"a": file_a, "b": file_b}, runs)
+    a3_bash = call_bash(["diff", "-u", file_a, file_b], runs)
     print_result("diff (main.rs vs grep.rs)", a3_mcp, a3_bash)
     results["A3_diff"] = {"mcp": a3_mcp, "bash": a3_bash}
 
     print("\n[A-4] git_diff: HEAD~1..HEAD")
-    a4_mcp = call_mcp("git_diff", {"repo": REPO, "from": "HEAD~1", "to": "HEAD"})
-    a4_bash = call_bash(["git", "diff", "HEAD~1", "HEAD"])
+    a4_mcp = call_mcp("git_diff", {"repo": REPO, "from": "HEAD~1", "to": "HEAD"}, runs)
+    a4_bash = call_bash(["git", "diff", "HEAD~1", "HEAD"], runs)
     print_result("git_diff (HEAD~1..HEAD)", a4_mcp, a4_bash)
     results["A4_git_diff"] = {"mcp": a4_mcp, "bash": a4_bash}
 
+    print("\n[A-5] file_outline: main.rs のシンボル一覧")
+    a5_mcp = call_mcp("file_outline", {"path": file_a}, runs)
+    # Bash相当: Rustの関数・構造体・列挙型・トレイト・impl をgrepで抽出
+    a5_bash = call_bash([
+        "grep", "-En",
+        r"^[[:space:]]*(pub[[:space:]]+)?(async[[:space:]]+)?fn[[:space:]]|"
+        r"^[[:space:]]*(pub[[:space:]]+)?struct[[:space:]]|"
+        r"^[[:space:]]*(pub[[:space:]]+)?enum[[:space:]]|"
+        r"^[[:space:]]*(pub[[:space:]]+)?trait[[:space:]]|"
+        r"^[[:space:]]*impl[[:space:]]",
+        file_a,
+    ], runs)
+    print_result("file_outline (main.rs)", a5_mcp, a5_bash)
+    results["A5_file_outline"] = {"mcp": a5_mcp, "bash": a5_bash}
+
+    print("\n[A-6] git_log: 直近20コミット")
+    a6_mcp = call_mcp("git_log", {"repo": REPO, "limit": 20}, runs)
+    a6_bash = call_bash([
+        "git", "-C", REPO, "log", "-20",
+        "--pretty=format:%h  %ad  %an  %s", "--date=short",
+    ], runs)
+    print_result("git_log (直近20件)", a6_mcp, a6_bash)
+    results["A6_git_log"] = {"mcp": a6_mcp, "bash": a6_bash}
+
     # ── シナリオB: 大規模（cargo registry）──────────────────────────
-    print("\n\n## シナリオB: 大規模（.cargo/registry - 600+ファイル、14000+マッチ）")
+    print("\n\n## シナリオB: 大規模（.cargo/registry - 600+ファイル）")
     print("※ MCP grep はデフォルトで max_matches=100 で打ち切り")
 
     print("\n[B-1] grep: 'fn ' を .cargo/registry で検索")
-    b1_mcp = call_mcp("grep", {"pattern": "fn ", "paths": [LARGE_DIR], "max_matches": 100})
-    b1_bash = call_bash(["grep", "-rn", "--include=*.rs", "fn ", LARGE_DIR])
+    b1_mcp = call_mcp("grep", {"pattern": "fn ", "paths": [LARGE_DIR], "max_matches": 100}, runs)
+    b1_bash = call_bash(["grep", "-rn", "--include=*.rs", "fn ", LARGE_DIR], runs)
     print_result("grep (大規模 / 100件上限 vs 無制限)", b1_mcp, b1_bash)
     results["B1_grep_large"] = {"mcp": b1_mcp, "bash": b1_bash}
 
     print("\n[B-2] find: .cargo/registry 以下の .rs ファイルを列挙")
-    b2_mcp = call_mcp("find", {"path": LARGE_DIR, "type": "f", "pattern": "*.rs"})
-    b2_bash = call_bash(["find", LARGE_DIR, "-type", "f", "-name", "*.rs"])
+    b2_mcp = call_mcp("find", {"path": LARGE_DIR, "type": "f", "pattern": "*.rs"}, runs)
+    b2_bash = call_bash(["find", LARGE_DIR, "-type", "f", "-name", "*.rs"], runs)
     print_result("find (大規模 / 200件上限 vs 無制限)", b2_mcp, b2_bash)
     results["B2_find_large"] = {"mcp": b2_mcp, "bash": b2_bash}
 
-    # ── シナリオC: ウォームサーバー（MCP永続プロセス）──────────────
-    print("\n\n## シナリオC: ウォームサーバー比較")
-    print("（MCP: 1プロセス起動 → 10リクエスト連続 vs Bash: 10回別プロセス起動）")
+    print("\n[B-3] file_outline: 大規模Rustファイル（syn/expr.rs 4179行）")
+    large_rs = os.path.expanduser(
+        "~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f"
+        "/syn-2.0.117/src/expr.rs"
+    )
+    b3_mcp = call_mcp("file_outline", {"path": large_rs}, runs)
+    b3_bash = call_bash([
+        "grep", "-En",
+        r"^[[:space:]]*(pub[[:space:]]+)?(async[[:space:]]+)?fn[[:space:]]|"
+        r"^[[:space:]]*(pub[[:space:]]+)?struct[[:space:]]|"
+        r"^[[:space:]]*(pub[[:space:]]+)?enum[[:space:]]|"
+        r"^[[:space:]]*(pub[[:space:]]+)?trait[[:space:]]|"
+        r"^[[:space:]]*impl[[:space:]]",
+        large_rs,
+    ], runs)
+    print_result("file_outline (syn/expr.rs 4179行)", b3_mcp, b3_bash)
+    results["B3_file_outline_large"] = {"mcp": b3_mcp, "bash": b3_bash}
 
+    print("\n[B-4] git_log: 107コミットのリポジトリ（limit=20 vs 無制限）")
+    seat_manager = os.path.expanduser("~/seat_manager")
+    b4_mcp = call_mcp("git_log", {"repo": seat_manager, "limit": 20}, runs)
+    b4_bash = call_bash([
+        "git", "-C", seat_manager, "log",
+        "--pretty=format:%h  %ad  %an  %s", "--date=short",
+    ], runs)
+    print_result("git_log (107コミット / limit=20 vs 全件)", b4_mcp, b4_bash)
+    results["B4_git_log_large"] = {"mcp": b4_mcp, "bash": b4_bash}
+
+    # ── シナリオC: ウォームサーバー（MCP永続プロセス）──────────────
     n = 10
-    args_list = [{"pattern": "fn ", "paths": [SRC]}] * n
+    print(f"\n\n## シナリオC: ウォームサーバー比較")
+    print(f"（MCP: 1プロセス起動 → {n}リクエスト連続 vs Bash: {n}回別プロセス起動）")
+
     warm = call_mcp_warm("grep", [{"pattern": "fn ", "paths": [SRC]}], repeat=n)
     cold_bash_times = []
     for _ in range(n):
@@ -246,25 +319,34 @@ def main():
     print("最終サマリー")
     print("=" * 70)
     summary_rows = [
-        ("A1: grep (小規模)", "A1_grep_small"),
-        ("A2: find (小規模)", "A2_find_small"),
-        ("A3: diff", "A3_diff"),
-        ("A4: git_diff", "A4_git_diff"),
-        ("B1: grep (大規模)", "B1_grep_large"),
-        ("B2: find (大規模)", "B2_find_large"),
+        ("A1: grep (小規模)",       "A1_grep_small"),
+        ("A2: find (小規模)",       "A2_find_small"),
+        ("A3: diff",                "A3_diff"),
+        ("A4: git_diff",            "A4_git_diff"),
+        ("A5: file_outline",        "A5_file_outline"),
+        ("A6: git_log",             "A6_git_log"),
+        ("B1: grep (大規模)",           "B1_grep_large"),
+        ("B2: find (大規模)",           "B2_find_large"),
+        ("B3: file_outline (大規模)",   "B3_file_outline_large"),
+        ("B4: git_log (大規模)",        "B4_git_log_large"),
     ]
     print(f"{'ケース':<28} {'速度(Bash/MCP)':>16} {'トークン削減(Bash/MCP)':>22}")
     print("-" * 68)
     for label, key in summary_rows:
         r = results[key]
-        speed = r["bash"]["avg_ms"] / r["mcp"]["avg_ms"] if r["mcp"]["avg_ms"] > 0 else 0
-        tokens = r["bash"]["approx_tokens"] / r["mcp"]["approx_tokens"] if r["mcp"]["approx_tokens"] > 0 else 0
+        speed  = r["bash"]["avg_ms"]        / r["mcp"]["avg_ms"]        if r["mcp"]["avg_ms"]        > 0 else 0
+        tokens = r["bash"]["approx_tokens"]  / r["mcp"]["approx_tokens"] if r["mcp"]["approx_tokens"] > 0 else 0
         print(f"  {label:<26} {speed:>14.2f}x {tokens:>20.2f}x")
 
     warm_speed = results["C_warm_server"]["bash"]["avg_ms"] / results["C_warm_server"]["mcp"]["avg_ms"]
     print(f"  {'C: ウォームサーバー(×10)':<26} {warm_speed:>14.2f}x {'(計測外)':>22}")
 
-    out_path = os.path.join(REPO, "scripts/benchmark_results.json")
+    out_path = cli.output or os.path.join(REPO, "scripts/benchmark_results.json")
+    results["_meta"] = {
+        "date": datetime.date.today().isoformat(),
+        "runs": runs,
+        "repo": REPO,
+    }
     with open(out_path, "w") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
     print(f"\n生データ保存先: {out_path}")

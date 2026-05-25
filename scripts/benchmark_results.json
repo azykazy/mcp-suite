@@ -1,108 +1,217 @@
 {
   "A1_grep_small": {
     "mcp": {
-      "avg_ms": 1.5526297996984795,
-      "min_ms": 1.3344070002858643,
-      "output_bytes": 1213,
-      "approx_tokens": 303,
-      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/diff.rs:7: pub fn run(args: &Value) -> Result<String> {\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs:6: pub fn run(args: &Value) -> Result<"
+      "avg_ms": 2.4072241428549597,
+      "min_ms": 2.0232360000136396,
+      "p95_ms": 2.8188526000462844,
+      "stdev_ms": 0.28737698712243975,
+      "output_bytes": 1434,
+      "approx_tokens": 358,
+      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/diff.rs:7: pub fn run(args: &Value) -> Result<String> {\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/file_outline.rs:7: pub fn run(args: &Value) ->"
     },
     "bash": {
-      "avg_ms": 1.2734433999867178,
-      "min_ms": 1.0704389997044927,
-      "output_bytes": 1201,
-      "approx_tokens": 300,
+      "avg_ms": 1.5661049999705159,
+      "min_ms": 1.3334020000002056,
+      "p95_ms": 2.089180399968882,
+      "stdev_ms": 0.3410471650630493,
+      "output_bytes": 1420,
+      "approx_tokens": 355,
       "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs:6:pub fn run(args: &Value) -> Result<String> {\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs:74:fn glob_match(text: &str, pattern: &"
     }
   },
   "A2_find_small": {
     "mcp": {
-      "avg_ms": 1.1349001997587038,
-      "min_ms": 0.9326439994765678,
-      "output_bytes": 289,
-      "approx_tokens": 72,
-      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/diff.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/git_diff.rs\\n/home/kazukiazuma/mcp-sui"
+      "avg_ms": 1.1313337142837554,
+      "min_ms": 1.0297879999825454,
+      "p95_ms": 1.322301499999412,
+      "stdev_ms": 0.1294008244346069,
+      "output_bytes": 414,
+      "approx_tokens": 103,
+      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/diff.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/file_outline.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs\\n/home/kazukiazuma/mcp"
     },
     "bash": {
-      "avg_ms": 1.394383399929211,
-      "min_ms": 1.3163920002625673,
-      "output_bytes": 289,
-      "approx_tokens": 72,
-      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/main.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/git_diff.rs\\n/home/kazukiazuma/mcp-sui"
+      "avg_ms": 1.5907655713850286,
+      "min_ms": 1.3778559999764184,
+      "p95_ms": 1.8253406999519939,
+      "stdev_ms": 0.184347297248355,
+      "output_bytes": 414,
+      "approx_tokens": 103,
+      "output_preview": "/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/find.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/file_outline.rs\\n/home/kazukiazuma/mcp-suite/custom/mcp-tools/src/git_log.rs\\n/home/kazukiazuma/"
     }
   },
   "A3_diff": {
     "mcp": {
-      "avg_ms": 1.7526225999972667,
-      "min_ms": 1.4881209999657585,
-      "output_bytes": 13142,
-      "approx_tokens": 3285,
-      "output_preview": "--- /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/main.rs\\n+++ /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/grep.rs\\n@@ -1,228 +1,178 @@\\n-use std::io::{self, BufRead, Write};\\n+use anyhow::{Contex"
+      "avg_ms": 2.0728204285660468,
+      "min_ms": 1.9104149999975562,
+      "p95_ms": 2.190669300000536,
+      "stdev_ms": 0.10119813176214676,
+      "output_bytes": 15839,
+      "approx_tokens": 3959,
+      "output_preview": "--- /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/main.rs\\n+++ /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/grep.rs\\n@@ -1,280 +1,185 @@\\n-use std::io::{self, BufRead, Write};\\n-\\n-use anyhow::Resul"
     },
     "bash": {
-      "avg_ms": 1.7045921998942504,
-      "min_ms": 1.1390449999453267,
-      "output_bytes": 13232,
-      "approx_tokens": 3308,
-      "output_preview": "--- /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/main.rs\t2026-05-22 10:13:33.462811804 +0900\\n+++ /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/grep.rs\t2026-05-22 09:49:16.887292523 +0900\\n@@ -1,"
+      "avg_ms": 1.4890572857341664,
+      "min_ms": 1.3296409999838943,
+      "p95_ms": 1.8794529000388138,
+      "stdev_ms": 0.2466746978823331,
+      "output_bytes": 15930,
+      "approx_tokens": 3982,
+      "output_preview": "--- /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/main.rs\t2026-05-22 17:47:41.761949961 +0900\\n+++ /home/kazukiazuma/mcp-suite/custom/mcp-tools/src/grep.rs\t2026-05-22 12:23:15.353651052 +0900\\n@@ -1,"
     }
   },
   "A4_git_diff": {
     "mcp": {
-      "avg_ms": 3.5270216001663357,
-      "min_ms": 3.379639000741008,
-      "output_bytes": 3825,
-      "approx_tokens": 956,
-      "output_preview": "diff --git a/custom/mcp-tools/src/git_diff.rs b/custom/mcp-tools/src/git_diff.rs\\nnew file mode 100644\\nindex 0000000..696a54e\\n--- /dev/null\\n+++ b/custom/mcp-tools/src/git_diff.rs\\n@@ -0,0 +1,51 @@\\n+use "
+      "avg_ms": 3.7599907143268347,
+      "min_ms": 3.2705640001040592,
+      "p95_ms": 4.252184400002079,
+      "stdev_ms": 0.36234752638672907,
+      "output_bytes": 3657,
+      "approx_tokens": 914,
+      "output_preview": "diff --git a/custom/mcp-tools/src/file_outline.rs b/custom/mcp-tools/src/file_outline.rs\\nnew file mode 100644\\nindex 0000000..a6c51d3\\n--- /dev/null\\n+++ b/custom/mcp-tools/src/file_outline.rs\\n@@ -0,0 +1"
     },
     "bash": {
-      "avg_ms": 2.5267871998948976,
-      "min_ms": 2.1151339997231844,
-      "output_bytes": 3825,
-      "approx_tokens": 956,
-      "output_preview": "diff --git a/custom/mcp-tools/src/git_diff.rs b/custom/mcp-tools/src/git_diff.rs\\nnew file mode 100644\\nindex 0000000..696a54e\\n--- /dev/null\\n+++ b/custom/mcp-tools/src/git_diff.rs\\n@@ -0,0 +1,51 @@\\n+use "
+      "avg_ms": 2.595543571439001,
+      "min_ms": 2.372003000004952,
+      "p95_ms": 2.8551276999905895,
+      "stdev_ms": 0.2022449748340318,
+      "output_bytes": 3657,
+      "approx_tokens": 914,
+      "output_preview": "diff --git a/custom/mcp-tools/src/file_outline.rs b/custom/mcp-tools/src/file_outline.rs\\nnew file mode 100644\\nindex 0000000..a6c51d3\\n--- /dev/null\\n+++ b/custom/mcp-tools/src/file_outline.rs\\n@@ -0,0 +1"
+    }
+  },
+  "A5_file_outline": {
+    "mcp": {
+      "avg_ms": 2.5718772856992342,
+      "min_ms": 2.2415299999920535,
+      "p95_ms": 2.924114000040845,
+      "stdev_ms": 0.2576018392461361,
+      "output_bytes": 184,
+      "approx_tokens": 46,
+      "output_preview": "  15: struct RpcRequest\\n  23: fn main()\\n  49: fn handle(req: RpcRequest) -> Option<Value>\\n  99: fn tools_list() -> Value\\n 270: fn call_tool(name: &str, args: &Value) -> Result<String>\\n"
+    },
+    "bash": {
+      "avg_ms": 2.0377988571453898,
+      "min_ms": 1.595231999999669,
+      "p95_ms": 2.4528878000523946,
+      "stdev_ms": 0.34694469283956897,
+      "output_bytes": 180,
+      "approx_tokens": 45,
+      "output_preview": "15:struct RpcRequest {\\n23:fn main() {\\n49:fn handle(req: RpcRequest) -> Option<Value> {\\n99:fn tools_list() -> Value {\\n270:fn call_tool(name: &str, args: &Value) -> Result<String> {\\n"
+    }
+  },
+  "A6_git_log": {
+    "mcp": {
+      "avg_ms": 4.428710142844595,
+      "min_ms": 3.8106000000652784,
+      "p95_ms": 5.299181100031092,
+      "stdev_ms": 0.5811166842556137,
+      "output_bytes": 1875,
+      "approx_tokens": 468,
+      "output_preview": "97bc259  2026-05-22  azykazy  feat(mcp-tools): file_outline ツールを追加 (#14)\\na4be490  2026-05-22  azykazy  feat(mcp-tools): git_log ツールを追加 (#13)\\nef2cb95  2026-05-22  azykazy  chore(setup): MCP設定先をClaude C"
+    },
+    "bash": {
+      "avg_ms": 3.0598518571391002,
+      "min_ms": 2.7157759999454356,
+      "p95_ms": 3.3726548000117873,
+      "stdev_ms": 0.27879015415299124,
+      "output_bytes": 1875,
+      "approx_tokens": 468,
+      "output_preview": "97bc259  2026-05-22  azykazy  feat(mcp-tools): file_outline ツールを追加 (#14)\\na4be490  2026-05-22  azykazy  feat(mcp-tools): git_log ツールを追加 (#13)\\nef2cb95  2026-05-22  azykazy  chore(setup): MCP設定先をClaude C"
     }
   },
   "B1_grep_large": {
     "mcp": {
-      "avg_ms": 3.9893896000648965,
-      "min_ms": 3.531440000188013,
+      "avg_ms": 9.173872428570055,
+      "min_ms": 8.783775999972931,
+      "p95_ms": 9.813341399956244,
+      "stdev_ms": 0.41789943076428204,
       "output_bytes": 16139,
       "approx_tokens": 4034,
       "output_preview": "/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aho-corasick-1.1.4/DESIGN.md:107:     fn has_prefix(trie: &Trie, haystack: &[u8]) -> bool {\\n/home/kazukiazuma/.cargo/registry/src"
     },
     "bash": {
-      "avg_ms": 40.29106200032402,
-      "min_ms": 37.931892000415246,
-      "output_bytes": 2371358,
-      "approx_tokens": 592839,
+      "avg_ms": 50.17347785717772,
+      "min_ms": 46.41240400007973,
+      "p95_ms": 53.16839830001072,
+      "stdev_ms": 2.343473511370464,
+      "output_bytes": 2687493,
+      "approx_tokens": 671873,
       "output_preview": "/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/benches/xid.rs:32:fn gen_string(p_nonascii: u32) -> String {\\n/home/kazukiazuma/.cargo/registry/src/index.cra"
     }
   },
   "B2_find_large": {
     "mcp": {
-      "avg_ms": 1.9924309999623802,
-      "min_ms": 1.4187329998094356,
-      "output_bytes": 21542,
-      "approx_tokens": 5385,
+      "avg_ms": 2.140732857112328,
+      "min_ms": 1.8134649999410613,
+      "p95_ms": 2.618938800014803,
+      "stdev_ms": 0.348716590160851,
+      "output_bytes": 21470,
+      "approx_tokens": 5367,
       "output_preview": "/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aho-corasick-1.1.4/src/ahocorasick.rs\\n/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aho-corasick-1.1.4/s"
     },
     "bash": {
-      "avg_ms": 3.229328599809378,
-      "min_ms": 2.949703999547637,
-      "output_bytes": 66291,
-      "approx_tokens": 16572,
+      "avg_ms": 4.338623142855015,
+      "min_ms": 3.8025900000775437,
+      "p95_ms": 4.93574049999097,
+      "stdev_ms": 0.4223782712774615,
+      "output_bytes": 78166,
+      "approx_tokens": 19541,
       "output_preview": "/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/benches/xid.rs\\n/home/kazukiazuma/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/s"
+    }
+  },
+  "B3_file_outline_large": {
+    "mcp": {
+      "avg_ms": 2.8962058571551097,
+      "min_ms": 2.6757410000755044,
+      "p95_ms": 3.1884739000133777,
+      "stdev_ms": 0.21463521743319217,
+      "output_bytes": 15477,
+      "approx_tokens": 3869,
+      "output_preview": " 114:     pub enum Expr\\n 274:     pub struct ExprArray #full\\n 284:     pub struct ExprAssign #full\\n 295:     pub struct ExprAsync #full\\n 306:     pub struct ExprAwait #full\\n 317:     pub struct ExprBi"
+    },
+    "bash": {
+      "avg_ms": 4.276112428604912,
+      "min_ms": 3.8226930000746506,
+      "p95_ms": 4.732388500019624,
+      "stdev_ms": 0.4091860013617982,
+      "output_bytes": 14881,
+      "approx_tokens": 3720,
+      "output_preview": "114:    pub enum Expr {\\n274:    pub struct ExprArray #full {\\n284:    pub struct ExprAssign #full {\\n295:    pub struct ExprAsync #full {\\n306:    pub struct ExprAwait #full {\\n317:    pub struct ExprBina"
+    }
+  },
+  "B4_git_log_large": {
+    "mcp": {
+      "avg_ms": 4.241655714281478,
+      "min_ms": 3.589327000099729,
+      "p95_ms": 5.353890200012756,
+      "stdev_ms": 0.7375433012068608,
+      "output_bytes": 2021,
+      "approx_tokens": 505,
+      "output_preview": "821d7fa  2026-05-22  Kazuki Azuma  fix(ci): frontend/package-lock.json をgit管理に追加してCI npm ciエラーを修正\\n9c6dcf4  2026-05-22  kaz-azuma  Merge pull request #13 from rgp-lab/feat/login-redesign\\nd927eaf  2026-"
+    },
+    "bash": {
+      "avg_ms": 6.774020714276828,
+      "min_ms": 6.5311010000641545,
+      "p95_ms": 7.14144009998563,
+      "stdev_ms": 0.24057098963947676,
+      "output_bytes": 11113,
+      "approx_tokens": 2778,
+      "output_preview": "821d7fa  2026-05-22  Kazuki Azuma  fix(ci): frontend/package-lock.json をgit管理に追加してCI npm ciエラーを修正\\n9c6dcf4  2026-05-22  kaz-azuma  Merge pull request #13 from rgp-lab/feat/login-redesign\\nd927eaf  2026-"
     }
   },
   "C_warm_server": {
     "mcp": {
-      "avg_ms": 0.26249769998685224,
-      "total_ms": 2.6249769998685224
+      "avg_ms": 0.5420119999939743,
+      "total_ms": 5.420119999939743
     },
     "bash": {
-      "avg_ms": 1.4015826999639103,
-      "total_ms": 14.015826999639103
+      "avg_ms": 1.6469825000058336,
+      "total_ms": 16.469825000058336
     }
+  },
+  "_meta": {
+    "date": "2026-05-25",
+    "runs": 7,
+    "repo": "/home/kazukiazuma/mcp-suite"
   }
 }
