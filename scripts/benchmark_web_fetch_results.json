@@ -1,0 +1,111 @@
+{
+  "W1": {
+    "scenario": {
+      "id": "W1",
+      "label": "小規模 HTML (example.com)",
+      "url": "https://example.com",
+      "selector": null
+    },
+    "mcp": {
+      "avg_ms": 207.37194566633357,
+      "min_ms": 93.50130899929354,
+      "p95_ms": 388.0053648000285,
+      "stdev_ms": 183.39315116007265,
+      "output_bytes": 190,
+      "approx_tokens": 47,
+      "output_preview": "[https://example.com]\\n\\n# Example Domain\\n\\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.\\n\\n[Learn more](https://iana.org/domains/example)",
+      "is_error": false
+    },
+    "curl": {
+      "avg_ms": 154.80940199965212,
+      "min_ms": 119.85816800006432,
+      "p95_ms": 208.15452219931103,
+      "stdev_ms": 54.09747948856735,
+      "output_bytes": 528,
+      "approx_tokens": 132
+    }
+  },
+  "W2": {
+    "scenario": {
+      "id": "W2",
+      "label": "中規模ドキュメント (docs.rs/anyhow)",
+      "url": "https://docs.rs/anyhow/latest/anyhow/",
+      "selector": null
+    },
+    "mcp": {
+      "avg_ms": 77.05388566652498,
+      "min_ms": 69.80742100040516,
+      "p95_ms": 83.05884279980091,
+      "stdev_ms": 6.945998522022312,
+      "output_bytes": 6846,
+      "approx_tokens": 1711,
+      "output_preview": "[https://docs.rs/anyhow/latest/anyhow/]\\n\\n[Docs.rs](/)\\n- [anyhow-1.0.102](#)\\n\\n- anyhow 1.0.102\\n- [Permalink](/anyhow/1.0.102/anyhow/)\\n- [Docs.rs crate page](/crate/anyhow/latest)\\n- [MIT](https://spdx.org/licenses/MIT) OR [Apache-2.0](https://spdx.org/licenses/Apache-2.0)\\n\\n- Links\\n- [Repository](https",
+      "is_error": false
+    },
+    "curl": {
+      "avg_ms": 129.22079599987532,
+      "min_ms": 124.48981800025649,
+      "p95_ms": 132.26400099974853,
+      "stdev_ms": 4.183810377612508,
+      "output_bytes": 26562,
+      "approx_tokens": 6640
+    }
+  },
+  "W3": {
+    "scenario": {
+      "id": "W3",
+      "label": "大規模ページ (doc.rust-lang.org/String)",
+      "url": "https://doc.rust-lang.org/std/string/struct.String.html",
+      "selector": null
+    },
+    "mcp": {
+      "avg_ms": 211.8782170000486,
+      "min_ms": 132.5983320002706,
+      "p95_ms": 335.3521766997801,
+      "stdev_ms": 125.28147383579991,
+      "output_bytes": 225493,
+      "approx_tokens": 56373,
+      "output_preview": "[https://doc.rust-lang.org/std/string/struct.String.html]\\n\\n[Skip to main content](#main-content)\\n\\n## [String](#)\\n\\n[[image: logo]](../../std/index.html)\\n\\n## [std](../../std/index.html) 1.95.0\\n\\n(59807616e 2026-04-14)\\n\\n## [String](#)\\n\\n### [Sections](#)\\n\\n- [Examples](#examples)\\n- [UTF-8](#utf-8)\\n- [Dere",
+      "is_error": false
+    },
+    "curl": {
+      "avg_ms": 227.35576266677526,
+      "min_ms": 162.87283600013325,
+      "p95_ms": 279.56453800024974,
+      "stdev_ms": 61.16775738222569,
+      "output_bytes": 638396,
+      "approx_tokens": 159599
+    }
+  },
+  "W4": {
+    "scenario": {
+      "id": "W4",
+      "label": "セレクター指定 main (docs.rs/anyhow)",
+      "url": "https://docs.rs/anyhow/latest/anyhow/",
+      "selector": "main"
+    },
+    "mcp": {
+      "avg_ms": 68.78944033299679,
+      "min_ms": 64.80403099976684,
+      "p95_ms": 71.97461859941541,
+      "stdev_ms": 3.7595851067344634,
+      "output_bytes": 4873,
+      "approx_tokens": 1218,
+      "output_preview": "[https://docs.rs/anyhow/latest/anyhow/]\\n\\n# Crate anyhow Copy item path\\n\\n[Source](../src/anyhow/lib.rs.html#1-728)\\n\\nExpand description\\n\\n[[image: github]](https://github.com/dtolnay/anyhow) [[image: crates-io]](https://crates.io/crates/anyhow) [[image: docs-rs]](https://docs.rs/anyhow)\\n\\nThis library p",
+      "is_error": false
+    },
+    "curl": {
+      "avg_ms": 217.14127299946995,
+      "min_ms": 133.42412399924797,
+      "p95_ms": 283.66263749958307,
+      "stdev_ms": 78.78335115417373,
+      "output_bytes": 26562,
+      "approx_tokens": 6640
+    }
+  },
+  "_meta": {
+    "date": "2026-05-25",
+    "runs": 3,
+    "max_chars": null
+  }
+}
