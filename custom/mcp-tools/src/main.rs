@@ -5,6 +5,7 @@ use serde::Deserialize;
 use serde_json::{json, Value};
 
 mod diff;
+mod directory_tree;
 mod file_outline;
 mod find;
 mod git_diff;
@@ -234,6 +235,28 @@ fn tools_list() -> Value {
             }
         },
         {
+            "name": "directory_tree",
+            "description": "Display directory structure as a compact tree. Respects .gitignore by default. Token-efficient alternative to running find or ls -R.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "Root directory to display (default: \".\")"
+                    },
+                    "max_depth": {
+                        "type": "integer",
+                        "description": "Maximum depth to recurse (optional, no limit by default)"
+                    },
+                    "no_ignore": {
+                        "type": "boolean",
+                        "description": "If true, show files ignored by .gitignore (default: false)"
+                    }
+                },
+                "required": []
+            }
+        },
+        {
             "name": "find",
             "description": "Find files or directories matching a pattern. Returns newline-separated paths. Token-efficient.",
             "inputSchema": {
@@ -271,6 +294,7 @@ fn call_tool(name: &str, args: &Value) -> Result<String> {
     match name {
         "grep" => grep::run(args),
         "diff" => diff::run(args),
+        "directory_tree" => directory_tree::run(args),
         "file_outline" => file_outline::run(args),
         "git_diff" => git_diff::run(args),
         "git_log" => git_log::run(args),
