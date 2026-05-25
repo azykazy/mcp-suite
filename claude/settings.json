@@ -35,7 +35,8 @@
       "mcp__mcp-tools__git_diff",
       "mcp__mcp-tools__directory_tree",
       "mcp__mcp-tools__file_outline",
-      "mcp__mcp-tools__git_log"
+      "mcp__mcp-tools__git_log",
+      "mcp__mcp-tools__web_fetch"
     ]
   },
   "hooks": {
