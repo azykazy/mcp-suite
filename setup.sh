@@ -4,6 +4,8 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_SETTINGS="$HOME/.claude/settings.json"
 CLAUDE_JSON="$HOME/.claude.json"
+CODEX_SOURCE_DIR="$REPO_DIR/codex"
+CODEX_TARGET_DIR="$HOME/.codex"
 MCP_CONFIG="$REPO_DIR/config/mcp_settings.json"
 ENV_FILE="$REPO_DIR/.env"
 export MCP_SUITE_DIR="$REPO_DIR"
@@ -149,6 +151,79 @@ install_agents() {
   echo "[OK] サブエージェントを $target_dir に設定しました"
 }
 
+# Codex 設定を ~/.codex/ へ同期
+install_codex_config() {
+  local src_dir="$CODEX_SOURCE_DIR"
+  local target_dir="$CODEX_TARGET_DIR"
+
+  if [ ! -d "$src_dir" ] || [ -z "$(ls -A "$src_dir" 2>/dev/null)" ]; then
+    echo "[SKIP] codex/ に Codex 設定が見つかりません"
+    return
+  fi
+
+  mkdir -p "$target_dir"
+
+  for file in AGENTS.md config.toml; do
+    local src="$src_dir/$file"
+    local dst="$target_dir/$file"
+    [ -f "$src" ] || continue
+
+    local install_src="$src"
+    local tmp_config=""
+    if [ "$file" = "config.toml" ]; then
+      tmp_config=$(mktemp)
+      node -e "
+        const fs = require('fs');
+        const vars = {
+          HOME: process.env.HOME ?? '',
+          MCP_SUITE_DIR: process.env.MCP_SUITE_DIR ?? '',
+        };
+        const c = fs.readFileSync(process.argv[1], 'utf8');
+        process.stdout.write(c.replace(/\\\${(HOME|MCP_SUITE_DIR)}/g, (_, k) => vars[k]));
+      " "$src" > "$tmp_config"
+      install_src="$tmp_config"
+    fi
+
+    if [ -f "$dst" ] && ! diff -q "$install_src" "$dst" > /dev/null 2>&1; then
+      local backup="$dst.bak.$(date +%Y%m%d%H%M%S)"
+      cp "$dst" "$backup"
+      echo "  [OK] バックアップ: $backup"
+    fi
+    cp "$install_src" "$dst"
+    [ -z "$tmp_config" ] || rm -f "$tmp_config"
+    echo "  [OK] $file → $dst"
+  done
+
+  for dir in agents hooks; do
+    local src_subdir="$src_dir/$dir"
+    local dst_subdir="$target_dir/$dir"
+    [ -d "$src_subdir" ] || continue
+
+    mkdir -p "$dst_subdir"
+    for src in "$src_subdir"/*; do
+      [ -f "$src" ] || continue
+      local name
+      name=$(basename "$src")
+      local dst="$dst_subdir/$name"
+
+      if [ -f "$dst" ] && ! diff -q "$src" "$dst" > /dev/null 2>&1; then
+        local backup="$dst.bak.$(date +%Y%m%d%H%M%S)"
+        cp "$dst" "$backup"
+        echo "  [OK] バックアップ: $backup"
+      fi
+      cp "$src" "$dst"
+      echo "  [OK] Codex $dir 導入: $name"
+    done
+  done
+
+  for hook in "$target_dir"/hooks/*.py; do
+    [ -f "$hook" ] || continue
+    chmod +x "$hook"
+  done
+
+  echo "[OK] Codex 設定を $target_dir に同期しました"
+}
+
 main() {
   check_deps
   load_env
@@ -156,9 +231,10 @@ main() {
   configure_claude
   install_claude_config
   install_agents
+  install_codex_config
   echo ""
   echo "=== セットアップ完了 ==="
-  echo "Claude Code を再起動してMCP・サブエージェントを有効化してください。"
+  echo "Claude Code / Codex を再起動してMCP・サブエージェントを有効化してください。"
 }
 
 main "$@"
