@@ -1,0 +1,100 @@
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+
+[features]
+hooks = true
+
+[agents]
+max_threads = 6
+max_depth = 1
+
+# Use this profile for sessions that should avoid reading host system paths.
+# Start with: codex -p locked
+[profiles.locked]
+default_permissions = "locked"
+
+[permissions.locked]
+deny_read = [
+  # System configuration.
+  "/etc/**",
+
+  # SSH / GPG credentials.
+  "${HOME}/.ssh/**",
+  "${HOME}/.gnupg/**",
+
+  # Cloud and cluster credentials.
+  "${HOME}/.aws/**",
+  "${HOME}/.azure/**",
+  "${HOME}/.config/gcloud/**",
+  "${HOME}/.kube/**",
+
+  # Package manager and deployment credentials.
+  "${HOME}/.docker/config.json",
+  "${HOME}/.npmrc",
+  "${HOME}/.pypirc",
+  "${HOME}/.netrc",
+
+  # Browser profiles and local secret stores.
+  "${HOME}/.mozilla/**",
+  "${HOME}/.config/google-chrome/**",
+  "${HOME}/.config/chromium/**",
+  "${HOME}/.password-store/**",
+  "${HOME}/.local/share/keyrings/**",
+
+  # Runtime and container secret mounts.
+  "/run/secrets/**",
+  "/var/run/secrets/**",
+  "/var/lib/cloud/**",
+]
+
+[projects."${HOME}/ai-std"]
+trust_level = "trusted"
+
+[projects."${HOME}/seat_manager"]
+trust_level = "trusted"
+
+[projects."/mnt/c/Users/KazukiAzuma東知輝/Documents/ObsidianVault/AI高速開発"]
+trust_level = "trusted"
+
+[projects."${MCP_SUITE_DIR}"]
+trust_level = "trusted"
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp@latest"]
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["@playwright/mcp@latest"]
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+
+[mcp_servers.mcp-tools]
+command = "${MCP_SUITE_DIR}/custom/mcp-tools/target/release/mcp-tools"
+startup_timeout_sec = 10
+tool_timeout_sec = 60
+
+[mcp_servers.terraform]
+command = "${MCP_SUITE_DIR}/custom/terraform/target/release/terraform-mcp"
+startup_timeout_sec = 10
+tool_timeout_sec = 60
+
+[[hooks.PreToolUse]]
+matcher = "^Bash$"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = "${HOME}/.codex/hooks/claude-parity-pre-tool-use.py"
+timeout = 30
+statusMessage = "Checking Claude parity policy"
+
+[hooks.state]
+
+[hooks.state."${HOME}/.codex/config.toml:pre_tool_use:0:0"]
+trusted_hash = "sha256:9c80df15ff909f01e47cc8bd279888f3f4f866880e5372706813d8f9f285dc5b"
+enabled = true
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4

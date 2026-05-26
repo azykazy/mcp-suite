@@ -1,6 +1,6 @@
 # mcp-suite
 
-自作 & OSS MCP と Claude Code サブエージェントをまとめた個人用セットアップリポジトリ。
+自作 & OSS MCP と Claude Code / Codex 設定をまとめた個人用セットアップリポジトリ。
 
 ## クイックスタート
 
@@ -10,7 +10,7 @@ cd mcp-suite
 bash setup.sh
 ```
 
-Claude Code を再起動するとMCPが有効になります。
+Claude Code / Codex を再起動するとMCP・サブエージェントが有効になります。
 
 ## 構成
 
@@ -19,6 +19,7 @@ mcp-suite/
 ├── setup.sh              # セットアップスクリプト（1本で完結）
 ├── config/
 │   └── mcp_settings.json # MCPサーバー設定テンプレート
+├── codex/                # Codex 設定・サブエージェント・hooks
 ├── custom/               # 自作MCPサーバー（ソースコード管理）
 │   └── mcp-tools/        # grep / diff / find（Rust実装）
 ├── oss/                  # OSSのMCP情報・参照
