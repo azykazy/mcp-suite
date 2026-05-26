@@ -10,6 +10,9 @@
     },
     "mcp-tools": {
       "command": "${MCP_SUITE_DIR}/custom/mcp-tools/target/release/mcp-tools"
+    },
+    "terraform": {
+      "command": "${MCP_SUITE_DIR}/custom/terraform/target/release/terraform-mcp"
     }
   }
 }
