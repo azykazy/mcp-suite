@@ -233,6 +233,7 @@ git-bug bridge new \
 | `test-writer` | フルアクセス | 新機能・バグ修正に対するテストケースの作成 |
 | `git-workflow-ja` | フルアクセス | ブランチ作成・コミット・PR作成のGitワークフロー全般 |
 | `issue-manager` | Read + Bash | git-bug を使った issue 作成・管理・GitHub 同期 |
+| `doc-manager` | フルアクセス | タスク・意思決定・ナレッジのドキュメント化・グラフ可視化 |
 
 ### 呼び出し方
 

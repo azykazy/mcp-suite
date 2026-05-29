@@ -37,6 +37,7 @@ model: claude-sonnet-4-6  # 省略可（省略時は親から継承）
 | [test-writer.md](test-writer.md) | test-writer | フルアクセス | テストケースの設計・実装 |
 | [git-workflow-ja.md](git-workflow-ja.md) | git-workflow-ja | フルアクセス | ブランチ作成〜PRまでのGitワークフロー |
 | [issue-manager.md](issue-manager.md) | issue-manager | Read + Bash | git-bug を使った issue 作成・管理・GitHub 同期 |
+| [doc-manager.md](doc-manager.md) | doc-manager | フルアクセス | タスク・意思決定・ナレッジをドキュメント化し、グラフで管理 |
 
 ## エージェントの追加
 
