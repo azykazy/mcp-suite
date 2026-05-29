@@ -179,6 +179,48 @@ web_fetch(url="https://example.com", max_chars=4000)
 
 ---
 
+## Issue 管理（git-bug）
+
+issue・チケットの管理には **git-bug** を使うこと。TODO.md への追記は行わない。
+
+### 基本コマンド
+
+```bash
+# issue 作成
+git-bug bug new --title "タイトル" --message "詳細"
+
+# issue 一覧
+git-bug bug ls
+
+# issue 詳細表示
+git-bug bug show <id>
+
+# ステータスをクローズに変更
+git-bug bug status close <id>
+
+# GitHub Issues から同期（pull）
+git-bug bridge pull github
+
+# ローカル → GitHub Issues に反映（push）
+git-bug bridge push github
+```
+
+### GitHub bridge 認証
+
+bridge 設定時は手動 PAT を発行せず、**`gh auth token` で取得したトークンを使うこと**。
+
+```bash
+git-bug bridge new \
+    --name=github \
+    --target=github \
+    --owner=<owner> \
+    --project=<repo> \
+    --token="$(gh auth token)" \
+    --non-interactive
+```
+
+---
+
 ## サブエージェント
 
 `~/.claude/agents/` に以下のサブエージェントが登録されている。タスクの性質に応じて積極的に活用すること。
@@ -190,6 +232,8 @@ web_fetch(url="https://example.com", max_chars=4000)
 | `debugger` | Read + Bash | エラー・テスト失敗・予期しない挙動の原因調査 |
 | `test-writer` | フルアクセス | 新機能・バグ修正に対するテストケースの作成 |
 | `git-workflow-ja` | フルアクセス | ブランチ作成・コミット・PR作成のGitワークフロー全般 |
+| `issue-manager` | Read + Bash | git-bug を使った issue 作成・管理・GitHub 同期 |
+| `doc-manager` | フルアクセス | タスク・意思決定・ナレッジのドキュメント化・グラフ可視化 |
 
 ### 呼び出し方
 
