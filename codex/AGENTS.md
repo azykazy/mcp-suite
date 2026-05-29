@@ -1,3 +1,11 @@
+---
+title: Codex グローバルガイドライン
+description: OpenAI Codex 向けのブランチ戦略・MCPツール・Terraform・サブエージェント設定
+type: config
+tags: [codex, guidelines, global]
+path: codex/AGENTS.md
+---
+
 # Codex グローバルガイドライン
 
 ## 基本方針

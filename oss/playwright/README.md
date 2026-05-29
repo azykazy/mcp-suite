@@ -1,3 +1,11 @@
+---
+title: Playwright MCP
+description: ブラウザを操作する OSS MCP サーバー
+type: readme
+tags: [mcp, playwright, oss, browser]
+path: oss/playwright/README.md
+---
+
 # Playwright MCP
 
 ブラウザを操作するMCPサーバー。

@@ -1,3 +1,11 @@
+---
+title: Claude Code グローバルガイドライン
+description: Claude Code 全プロジェクト共通のブランチ戦略・MCPツール・Terraform・サブエージェント設定
+type: config
+tags: [claude-code, guidelines, global]
+path: claude/CLAUDE.md
+---
+
 # Claude Code グローバルガイドライン
 
 ## ブランチ戦略

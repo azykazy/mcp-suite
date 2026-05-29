@@ -1,3 +1,11 @@
+---
+title: mcp-tools
+description: Rust 実装の軽量 MCP サーバー（grep・diff・find 等のトークン効率化ツール）
+type: readme
+tags: [mcp-tools, rust, mcp]
+path: custom/mcp-tools/README.md
+---
+
 # mcp-tools
 
 Rustで実装した軽量MCPサーバー。grep・diff・findをトークン効率よく提供します。

@@ -8,6 +8,8 @@ model: claude-sonnet-4-6
 disallowedTools:
   - Edit
   - Write
+tags: [debug, bash, investigation]
+path: agents/debugger.md
 ---
 
 あなたはバグ調査・原因特定の専門エージェントです。エラーの根本原因を突き止め、修正方針を提案します。修正の実施は行いません。

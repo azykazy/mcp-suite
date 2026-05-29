@@ -1,3 +1,11 @@
+---
+title: MCPツール ベンチマーク比較レポート
+description: Rust 製 MCP Tools と標準 Bash コマンドのパフォーマンス比較レポート
+type: doc
+tags: [benchmark, mcp-tools, rust, performance]
+path: docs/benchmark.md
+---
+
 # MCPツール ベンチマーク比較レポート
 
 **計測日:** 2026-05-22  
