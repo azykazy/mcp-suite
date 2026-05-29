@@ -8,6 +8,30 @@ path: codex/AGENTS.md
 
 # Codex グローバルガイドライン
 
+## Markdown ファイル作成ルール
+
+新しい `.md` ファイルを作成する際は、必ずファイル先頭に以下の frontmatter を付与すること。
+
+```yaml
+---
+title: "表示用タイトル"
+description: "ファイルの用途の一言説明"
+type: readme | doc | config | agent
+tags: [タグ1, タグ2]
+path: リポジトリルートからの相対パス（例: docs/example.md）
+---
+```
+
+| フィールド | 必須 | 説明 |
+|---|---|---|
+| `title` | ✓ | 人間が読みやすい表示用タイトル |
+| `description` | ✓ | ファイルの用途・目的の一言説明 |
+| `type` | ✓ | `readme` / `doc` / `config` / `agent` のいずれか |
+| `tags` | ✓ | 内容を表すキーワードのリスト |
+| `path` | ✓ | リポジトリルートからの相対パス |
+
+---
+
 ## 基本方針
 
 - 日本語で簡潔に応答する。
