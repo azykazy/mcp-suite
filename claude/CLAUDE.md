@@ -1,4 +1,36 @@
+---
+title: Claude Code グローバルガイドライン
+description: Claude Code 全プロジェクト共通のブランチ戦略・MCPツール・Terraform・サブエージェント設定
+type: config
+tags: [claude-code, guidelines, global]
+path: claude/CLAUDE.md
+---
+
 # Claude Code グローバルガイドライン
+
+## Markdown ファイル作成ルール
+
+新しい `.md` ファイルを作成する際は、必ずファイル先頭に以下の frontmatter を付与すること。
+
+```yaml
+---
+title: "表示用タイトル"
+description: "ファイルの用途の一言説明"
+type: readme | doc | config | agent
+tags: [タグ1, タグ2]
+path: リポジトリルートからの相対パス（例: docs/example.md）
+---
+```
+
+| フィールド | 必須 | 説明 |
+|---|---|---|
+| `title` | ✓ | 人間が読みやすい表示用タイトル |
+| `description` | ✓ | ファイルの用途・目的の一言説明 |
+| `type` | ✓ | `readme` / `doc` / `config` / `agent` のいずれか |
+| `tags` | ✓ | 内容を表すキーワードのリスト |
+| `path` | ✓ | リポジトリルートからの相対パス |
+
+---
 
 ## インフラプラットフォームの質問ルール
 

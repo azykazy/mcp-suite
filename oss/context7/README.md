@@ -1,3 +1,11 @@
+---
+title: context7 MCP
+description: ライブラリの最新ドキュメントを取得する OSS MCP サーバー
+type: readme
+tags: [mcp, context7, oss, documentation]
+path: oss/context7/README.md
+---
+
 # context7 MCP
 
 ライブラリの最新ドキュメントを取得するMCPサーバー。

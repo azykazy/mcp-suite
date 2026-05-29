@@ -1,3 +1,11 @@
+---
+title: GitHub MCP
+description: GitHub API を操作する OSS MCP サーバー
+type: readme
+tags: [mcp, github, oss]
+path: oss/github/README.md
+---
+
 # GitHub MCP
 
 GitHub APIを操作するMCPサーバー。

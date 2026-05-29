@@ -1,3 +1,11 @@
+---
+title: サブエージェント一覧
+description: ~/.claude/agents/ に同期されるサブエージェント定義の管理ディレクトリ
+type: readme
+tags: [agents, claude-code]
+path: agents/README.md
+---
+
 # agents/
 
 `.claude/agents/` に配置するサブエージェント定義ファイルを管理するディレクトリ。

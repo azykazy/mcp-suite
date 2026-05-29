@@ -1,3 +1,11 @@
+---
+title: mcp-tools TODO
+description: Rust 製 MCP ツールの拡充計画・実装状況トラッキング
+type: doc
+tags: [todo, mcp-tools, rust]
+path: TODO.md
+---
+
 # mcp-tools TODO
 
 Rust 製 MCP ツールの拡充計画。出力サイズ制御によるトークン削減を主目的とする。

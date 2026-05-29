@@ -1,3 +1,11 @@
+---
+title: mcp-suite
+description: 自作 & OSS MCP と Claude Code / Codex 設定をまとめた個人用セットアップリポジトリ
+type: readme
+tags: [mcp, claude-code, codex, setup]
+path: README.md
+---
+
 # mcp-suite
 
 自作 & OSS MCP と Claude Code / Codex 設定をまとめた個人用セットアップリポジトリ。
