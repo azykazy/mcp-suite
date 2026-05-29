@@ -40,6 +40,16 @@
     ]
   },
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"\nimport sys, json, os, re\ntry:\n    d = json.loads(os.environ.get('CLAUDE_TOOL_INPUT', '{}'))\n    prompt = d.get('prompt', '')\nexcept:\n    prompt = ''\npattern = r'(?i)\\b(aws|amazon web services|amazon|ec2|s3|rds|lambda|cloudfront|cloudwatch|route53|vpc|eks|ecs|fargate|dynamodb|sqs|sns|cognito|iam|alb|elb|nlb|aurora|elasticache|gcp|google cloud platform|bigquery|gke|cloud run|gcf|azure|terraform|kubernetes|k8s|cloudflare|lightsail|beanstalk|amplify)\\b'\nif re.search(pattern, prompt):\n    print('[インフラ最新情報確認ルール] AWSやGCP・Azure等のインフラキーワードが検出されました。必ず回答前に mcp-tools:web_fetch または context7 で公式ドキュメントの最新情報を取得してください。学習データのみによる回答は禁止です。回答には参照元URLを明示すること。')\n\""
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Read",

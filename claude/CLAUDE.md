@@ -1,5 +1,17 @@
 # Claude Code グローバルガイドライン
 
+## インフラプラットフォームの質問ルール
+
+AWS・GCP・Azure・Terraform・Kubernetes・Cloudflare 等の主要インフラプラットフォームに関する質問には、**必ず回答前に公式ドキュメントの最新情報を取得すること**。
+
+- `mcp-tools: web_fetch` または `context7` で最新ドキュメントを参照する
+- 学習データのみによる回答は禁止（仕様・料金・制限は頻繁に変わるため）
+- 回答には必ず参照元 URL を明示する
+
+対象キーワード例: EC2, S3, RDS, Lambda, CloudFront, EKS, ECS, DynamoDB, SQS, IAM, VPC, BigQuery, GKE, Azure, Terraform, Kubernetes など
+
+---
+
 ## ブランチ戦略
 
 ### 命名規則
