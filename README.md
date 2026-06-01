@@ -27,18 +27,25 @@ mcp-suite/
 ├── setup.sh              # セットアップスクリプト（1本で完結）
 ├── config/
 │   └── mcp_settings.json # MCPサーバー設定テンプレート
+├── claude/               # Claude Code グローバル設定
+│   ├── CLAUDE.md         # 全プロジェクト共通ガイドライン
+│   └── settings.json     # 権限・フック設定
 ├── codex/                # Codex 設定・サブエージェント・hooks
 ├── custom/               # 自作MCPサーバー（ソースコード管理）
-│   └── mcp-tools/        # grep / diff / find（Rust実装）
+│   ├── mcp-tools/        # grep / diff / find（Rust実装）
+│   └── terraform/        # Terraform操作MCP（Rust実装）
 ├── oss/                  # OSSのMCP情報・参照
 │   ├── context7/         # ドキュメント取得MCP
-│   └── playwright/       # ブラウザ操作MCP
+│   ├── playwright/       # ブラウザ操作MCP
+│   └── github/           # GitHub操作MCP
 └── agents/               # Claude Code サブエージェント定義
     ├── code-reviewer-ja.md  # PR前の品質・設計レビュー（読み取り専用）
     ├── security-reviewer.md # セキュリティレビュー（読み取り専用）
     ├── debugger.md          # バグ・エラー原因調査（Bash可・編集不可）
     ├── test-writer.md       # テストケース設計・実装
-    └── git-workflow-ja.md   # Gitワークフロー担当
+    ├── git-workflow-ja.md   # Gitワークフロー担当
+    ├── issue-manager.md     # git-bug による issue 管理
+    └── doc-manager.md       # タスク・意思決定・ナレッジのドキュメント化
 ```
 
 ## 含まれるMCP
@@ -49,12 +56,14 @@ mcp-suite/
 |-----|------|-----------|
 | context7 | ライブラリドキュメント取得 | `@upstash/context7-mcp` |
 | Playwright | ブラウザ操作 | `@playwright/mcp` |
+| GitHub | GitHub Issues / PR / リポジトリ操作 | `@modelcontextprotocol/server-github` |
 
 ### 自作
 
 | MCP | 用途 | 実装 |
 |-----|------|------|
 | [mcp-tools](custom/mcp-tools/) | grep / diff / find（低トークン・高速） | Rust |
+| [terraform](custom/terraform/) | Terraform plan / apply / state 操作 | Rust |
 
 詳細は各ディレクトリの README を参照。
 
@@ -67,6 +76,8 @@ mcp-suite/
 | debugger | Read + Bash | エラー・バグの原因調査 |
 | test-writer | フルアクセス | テストケースの設計・実装 |
 | git-workflow-ja | フルアクセス | ブランチ作成〜PRのGitワークフロー |
+| issue-manager | Read + Bash | git-bug による issue 作成・管理・GitHub 同期 |
+| doc-manager | フルアクセス | タスク・意思決定・ナレッジのドキュメント化・グラフ可視化 |
 
 詳細は [agents/README.md](agents/README.md) を参照。
 
