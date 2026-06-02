@@ -230,11 +230,11 @@ main() {
   build_custom_mcps
   configure_claude
   install_claude_config
-  install_agents
+  # install_agents  # サブエージェントは無効化（定義は agents/ に保持）
   install_codex_config
   echo ""
   echo "=== セットアップ完了 ==="
-  echo "Claude Code / Codex を再起動してMCP・サブエージェントを有効化してください。"
+  echo "Claude Code / Codex を再起動してMCPを有効化してください。"
 }
 
 main "$@"
