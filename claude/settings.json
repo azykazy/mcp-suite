@@ -102,8 +102,7 @@
   },
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
-    "serena@claude-plugins-official": true,
-    "everything-claude-code@everything-claude-code": true
+    "serena@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "everything-claude-code": {
@@ -113,5 +112,6 @@
       }
     }
   },
-  "language": "Japanese"
+  "language": "Japanese",
+  "theme": "dark"
 }
