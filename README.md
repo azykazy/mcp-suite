@@ -43,9 +43,7 @@ mcp-suite/
     ├── security-reviewer.md # セキュリティレビュー（読み取り専用）
     ├── debugger.md          # バグ・エラー原因調査（Bash可・編集不可）
     ├── test-writer.md       # テストケース設計・実装
-    ├── git-workflow-ja.md   # Gitワークフロー担当
-    ├── issue-manager.md     # git-bug による issue 管理
-    └── doc-manager.md       # タスク・意思決定・ナレッジのドキュメント化
+    └── git-workflow-ja.md   # Gitワークフロー担当
 ```
 
 ## 含まれるMCP
@@ -76,8 +74,6 @@ mcp-suite/
 | debugger | Read + Bash | エラー・バグの原因調査 |
 | test-writer | フルアクセス | テストケースの設計・実装 |
 | git-workflow-ja | フルアクセス | ブランチ作成〜PRのGitワークフロー |
-| issue-manager | Read + Bash | git-bug による issue 作成・管理・GitHub 同期 |
-| doc-manager | フルアクセス | タスク・意思決定・ナレッジのドキュメント化・グラフ可視化 |
 
 詳細は [agents/README.md](agents/README.md) を参照。
 
