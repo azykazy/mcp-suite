@@ -60,7 +60,7 @@ AWS・GCP・Azure・Terraform・Kubernetes・Cloudflare 等の主要インフラ
 
 ### 作業開始前のルール
 
-新しいタスクを受けたら、**コードを一切変更する前に**必ず以下の手順を実行する。
+新しいタスクを受けたら、**ファイルの追加・変更・削除を一切行う前に**必ず以下の手順を実行する。
 
 1. `git branch --show-current` で現在のブランチを確認する
 2. `main` / `master` 以外にいる場合は `git checkout main` で切り替える
