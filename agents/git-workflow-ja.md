@@ -47,8 +47,67 @@ git checkout -b <type>/<topic>
 ### 2. コミット前の確認
 変更内容・意図・コミットメッセージ案をユーザーに提示し、承認を得てからコミットする。
 
-### 3. PR作成
-- タイトル: 日本語で変更内容を簡潔に（70文字以内）
+### 3. プッシュ・PR 確認
+
+プッシュ前に、現在のブランチに対して既存のオープン PR があるかを確認し、結果に応じて分岐する。
+
+```bash
+gh pr list --head "$(git branch --show-current)" --state open --json number,title,url
+```
+
+**既存 PR あり** → プッシュ後に差分サマリーをコメントとして PR に投稿する。
+
+```bash
+BRANCH="$(git branch --show-current)"
+PR_NUMBER=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
+
+# プッシュ前のリモート HEAD を記録
+BEFORE=$(git rev-parse "origin/$BRANCH" 2>/dev/null || echo "")
+
+git push origin "$BRANCH"
+
+# プッシュ後の差分サマリーをコメント投稿
+if [ -n "$BEFORE" ]; then
+  COMMITS=$(git log "$BEFORE"..HEAD --oneline)
+  STAT=$(git diff "$BEFORE"..HEAD --stat)
+else
+  COMMITS=$(git log --oneline -10)
+  STAT=$(git diff HEAD~1..HEAD --stat)
+fi
+
+gh pr comment "$PR_NUMBER" --body "$(cat <<EOF
+## 追加プッシュの差分サマリー
+
+### コミット
+\`\`\`
+$COMMITS
+\`\`\`
+
+### 変更ファイル
+\`\`\`
+$STAT
+\`\`\`
+EOF
+)"
+```
+
+PR 番号・タイトル・URL をユーザーに提示する。
+
+**既存 PR なし** → プッシュ後に新規 PR を作成する。
+
+```bash
+git push -u origin "$(git branch --show-current)"
+gh pr create --title "<日本語タイトル（70文字以内）>" --body "$(cat <<'EOF'
+## Summary
+- <変更点>
+
+## Test plan
+- [ ] <確認事項>
+EOF
+)"
+```
+
+- PR タイトル: 日本語で変更内容を簡潔に（70文字以内）
 - body: Summary（箇条書き）+ Test plan
 - squash merge のみ許可
 

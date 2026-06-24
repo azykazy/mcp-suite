@@ -103,6 +103,21 @@ AWS・GCP・Azure・Terraform・Kubernetes・Cloudflare 等の主要インフラ
 - PR タイトルは変更内容を簡潔に表した日本語で記載する
 - ブランチのマージ後は作業ブランチを削除する
 
+**プッシュ前の PR 存在確認（必須）**
+
+プッシュする前に、現在のブランチに対して既存のオープン PR があるかを確認すること。
+
+```bash
+gh pr list --head "$(git branch --show-current)" --state open --json number,title,url
+```
+
+- **既存 PR が存在する場合** → プッシュ後に差分サマリーをコメントとして PR に投稿する。手順:
+  1. プッシュ前のリモート HEAD を `git rev-parse origin/<branch>` で記録する
+  2. `git push` を実行する
+  3. 記録した HEAD からの差分（コミット一覧・変更ファイル統計）を `gh pr comment` で投稿する
+  4. PR 番号・タイトル・URL をユーザーに提示する
+- **既存 PR が存在しない場合** → `git push -u origin <branch>` の後に `gh pr create` で新規 PR を作成する。
+
 **ローカルのみの場合（`git remote` が空、またはリモートなし）**
 
 - PR は作成しない
