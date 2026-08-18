@@ -39,6 +39,17 @@
       "mcp__mcp-tools__file_outline",
       "mcp__mcp-tools__git_log",
       "mcp__mcp-tools__web_fetch"
+    ],
+    "deny": [
+      "Read(//Users/kazukiazuma/.aws/**)",
+      "Read(~/.aws/**)",
+      "Bash(cat ~/.aws/**)",
+      "Bash(cat //Users/kazukiazuma/.aws/**)",
+      "Bash(less ~/.aws/**)",
+      "Bash(head ~/.aws/**)",
+      "Bash(tail ~/.aws/**)",
+      "Bash(aws configure get*)",
+      "Bash(aws configure export-credentials*)"
     ]
   },
   "hooks": {
@@ -102,13 +113,20 @@
   "enabledPlugins": {
     "context7@claude-plugins-official": true,
     "serena@claude-plugins-official": true,
-    "everything-claude-code@everything-claude-code": true
+    "everything-claude-code@everything-claude-code": true,
+    "regrit-slides@rgp-lab": true
   },
   "extraKnownMarketplaces": {
     "everything-claude-code": {
       "source": {
         "source": "github",
         "repo": "affaan-m/everything-claude-code"
+      }
+    },
+    "rgp-lab": {
+      "source": {
+        "source": "github",
+        "repo": "rgp-lab/regrit-slides"
       }
     }
   },
