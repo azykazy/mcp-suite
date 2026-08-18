@@ -284,43 +284,30 @@ source: "<情報源URL（あれば）>"
 
 ---
 
-## Issue 管理（git-bug）
+## Issue 管理（GitHub Issues）
 
-issue・チケットの管理には **git-bug** を使うこと。TODO.md への追記は行わない。メインエージェントが直接コマンドを実行する。
+issue・チケットの管理には **GitHub Issues** を `gh` CLI 経由で使うこと。TODO.md への追記は行わない。メインエージェントが直接コマンドを実行する。
 
 ### 基本コマンド
 
 ```bash
 # issue 作成
-git-bug bug new --title "タイトル" --message "詳細"
+gh issue create --title "タイトル" --body "詳細"
 
-# issue 詳細表示（状態確認は ls ではなく必ず show を使う）
-git-bug bug show <id>
+# issue 一覧（オープンのみ）
+gh issue list --state open
 
-# ステータスをクローズに変更
-git-bug bug status close <id>
+# issue 詳細表示（状態確認は list ではなく必ず view を使う）
+gh issue view <number> --comments
 
 # コメント追加
-git-bug bug comment add <id> --message "コメント"
+gh issue comment <number> --body "コメント"
 
-# GitHub Issues から同期（pull）
-git-bug bridge pull github
-
-# ローカル → GitHub Issues に反映（push）
-git-bug bridge push github
+# クローズ / 再オープン
+gh issue close <number>
+gh issue reopen <number>
 ```
 
-### GitHub bridge 認証
+### 認証
 
-bridge 設定時は手動 PAT を発行せず、**`gh auth token` で取得したトークンを使うこと**。
-
-```bash
-git-bug bridge new \
-    --name=github \
-    --target=github \
-    --owner=<owner> \
-    --project=<repo> \
-    --token="$(gh auth token)" \
-    --non-interactive
-```
-
+`gh auth status` で認証状態を確認する。未認証の場合はトークンを手動発行せず、ユーザーに `gh auth login` の実行を依頼する。

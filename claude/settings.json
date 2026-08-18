@@ -16,7 +16,6 @@
       "Bash(git fetch*)",
       "Bash(git pull*)",
       "Bash(git rebase*)",
-      "Bash(git-bug*)",
       "Bash(gh*)",
       "Bash(ls*)",
       "Bash(mkdir*)",
